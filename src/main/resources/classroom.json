@@ -1,59 +1,59 @@
 {
-  "classroom": [
-    [
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
-    ],
-    [
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
-    ],
-    [
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
-    ],
-    [
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
-    ],
-    [
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
-    ],
-    [
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
-    ],
-    [
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
-    ],
-    [
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
-    ],
-    [
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
-    ],
-    [
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
-    ],
-    [
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-      { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
-    ]
-  ]
+	"classroom": [
+		[
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "board" , "orientation": "null"}, { "type": "board" , "orientation": "null"}, { "type": "board" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
+		],
+		[
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
+		],
+		[
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "teacherChair" , "orientation": "front"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
+		],
+		[
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "desk" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
+		],
+		[
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
+		],
+		[
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "desk" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "desk" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "desk" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
+		],
+		[
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "studentChair" , "orientation": "back"}, { "type": "floor" , "orientation": "null"}, { "type": "studentChair" , "orientation": "back"}, { "type": "floor" , "orientation": "null"}, { "type": "studentChair" , "orientation": "back"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
+		],
+		[
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
+		],
+		[
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
+		],
+		[
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
+		],
+		[
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
+		]
+	]
 }

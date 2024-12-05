@@ -1,9 +1,11 @@
 package CharacterPack;
 
+import TilePack.TeacherChair;
+
 public class Mistress extends Character
 {
-	public Mistress()
+	public Mistress(TeacherChair chair)
 	{
-		super();
+		super("sprites/mistress.png", chair);
 	}
 }

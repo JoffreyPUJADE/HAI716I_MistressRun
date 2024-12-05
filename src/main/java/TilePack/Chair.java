@@ -6,14 +6,14 @@ public abstract class Chair extends Tile
 	
 	public Chair(String resourceName, String orientation)
 	{
-		super(getFullResourceName(resourceName, strToEnum(orientation)));
+		super(getFullResourceName(resourceName, strToEnum(orientation)), false);
 		
 		m_orientation = strToEnum(orientation);
 	}
 	
 	public Chair(String resourceName, Orientation orientation)
 	{
-		super(getFullResourceName(resourceName, orientation));
+		super(getFullResourceName(resourceName, orientation), false);
 		
 		m_orientation = orientation;
 	}
@@ -46,7 +46,7 @@ public abstract class Chair extends Tile
 	
 	static private String getFullResourceName(String resourceName, Orientation orientation)
 	{
-		String fullName = resourceName.split(".")[0]; // Beginning of the resource name.
+		String fullName = resourceName.split("\\.")[0]; // Beginning of the resource name.
 		
 		switch(orientation)
 		{
