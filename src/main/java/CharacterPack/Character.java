@@ -66,9 +66,22 @@ public abstract class Character
 		return m_chair;
 	}
 	
+	public abstract Pair<Tile, int[]> getCurrentPosition();
+	
 	public void setDirection(String direction)
 	{
 		m_direction = direction;
+	}
+	
+	public boolean goToChair()
+	{
+		Game game = Game.getInstance();
+		Classroom classroom = game.getClassroom();
+		
+		Pair<Tile, int[]> currentPosition = getCurrentPosition();
+		int[] chairPosition = classroom.getTileCoords((Tile)m_chair);
+		
+		return move(currentPosition, new Pair<Tile, int[]>((Tile)m_chair, chairPosition));
 	}
 	
 	public boolean move(Pair<Tile, int[]> currentTile, Pair<Tile, int[]> targetTile)

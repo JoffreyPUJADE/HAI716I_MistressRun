@@ -85,4 +85,9 @@ public class Common
 			return -1;
 		}
 	}
+	
+	static public int distanceManhattan(int x1, int y1, int x2, int y2)
+	{
+		return Math.abs(x2 - x1) + Math.abs(y2 - y1);
+	}
 }

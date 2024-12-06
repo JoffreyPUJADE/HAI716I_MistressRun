@@ -129,6 +129,22 @@ public class Classroom extends JPanel
 		return m_classroom.size() * m_tileSize;
 	}
 	
+	public int[] getTileCoords(Tile tile)
+	{
+		for(int i=0;i<m_classroom.size();++i)
+		{
+			for(int j=0;j<m_classroom.get(i).size();++j)
+			{
+				if(m_classroom.get(i).get(j) == tile)
+				{
+					return new int[]{i, j};
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 	public ArrayList<ArrayList<Tile>> getTiles()
 	{
 		return m_classroom;
@@ -165,6 +181,24 @@ public class Classroom extends JPanel
 				if(arrayRes.get(i).get(j) == null)
 				{
 					arrayRes.get(i).set(j, (Character)m_mistresses.get(i).get(j));
+				}
+			}
+		}
+		
+		return arrayRes;
+	}
+	
+	public ArrayList<Pair<Candy, int[]>> getCandies()
+	{
+		ArrayList<Pair<Candy, int[]>> arrayRes = new ArrayList<>();
+		
+		for(int i=0;i<m_classroom.size();++i)
+		{
+			for(int j=0;j<m_classroom.get(i).size();++j)
+			{
+				if(m_classroom.get(i).get(j) instanceof Candy)
+				{
+					arrayRes.add(new Pair<Candy, int[]>((Candy)m_classroom.get(i).get(j), new int[]{i, j}));
 				}
 			}
 		}
@@ -211,7 +245,8 @@ public class Classroom extends JPanel
 			}
 		}
 		
-		student.move(new Pair<Tile, int[]>((Tile)student.getChair(), new int[]{c, d}), new Pair<Tile, int[]>(m_classroom.get(a).get(b), new int[]{a, b}));
+		//student.move(new Pair<Tile, int[]>((Tile)student.getChair(), new int[]{c, d}), new Pair<Tile, int[]>(m_classroom.get(a).get(b), new int[]{a, b}));
+		student.goToNearestCandy();
 	}
 	
 	@Override
