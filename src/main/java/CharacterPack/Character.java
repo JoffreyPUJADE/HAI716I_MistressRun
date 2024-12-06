@@ -259,7 +259,7 @@ public abstract class Character
 	
 	private boolean isObstacle(ArrayList<ArrayList<Tile>> map, ArrayList<ArrayList<Character>> charInClass, int x, int y, Character currentChar)
 	{
-		return map.get(x).get(y).isObstacle() || (charInClass.get(x).get(y) != null && charInClass.get(x).get(y) != currentChar);
+		return map.get(x).get(y).isObstacle() || (charInClass.get(x).get(y) != null && charInClass.get(x).get(y) != currentChar) || ((map.get(x).get(y) instanceof Chair) && (((Chair)map.get(x).get(y)) != m_chair));
 	}
 	
 	private boolean isInBounds(int x, int y, ArrayList<ArrayList<Tile>> map)

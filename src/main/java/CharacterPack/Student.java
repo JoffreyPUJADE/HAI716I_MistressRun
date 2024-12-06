@@ -10,7 +10,7 @@ import GraphicsPack.Classroom;
 
 import java.util.ArrayList;
 
-public class Student extends Character
+public class Student extends Character implements Runnable
 {
 	private int m_candyCounter;
 	
@@ -104,5 +104,11 @@ public class Student extends Character
 	public String toString()
 	{
 		return String.format("%s ; CandyCounter : %d", super.toString(), m_candyCounter);
+	}
+	
+	public void run()
+	{
+		goToNearestCandy();
+		goToChair();
 	}
 }

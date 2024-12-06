@@ -250,6 +250,43 @@ public class Classroom extends JPanel
 		student.goToChair();
 	}
 	
+	public void moveAllStudentToCandy()
+	{
+		ArrayList<Student> arrayStudents = new ArrayList<>();
+		
+		for(int i=0;i<m_students.size();++i)
+		{
+			for(int j=0;j<m_students.get(i).size();++j)
+			{
+				if(m_students.get(i).get(j) != null)
+				{
+					arrayStudents.add(m_students.get(i).get(j));
+				}
+			}
+		}
+		
+		ArrayList<Thread> threads = new ArrayList<>();
+		
+		try
+		{
+			for(int i=0;i<arrayStudents.size();++i)
+			{
+				threads.add(new Thread(arrayStudents.get(i)));
+				
+				threads.get(i).start();
+			}
+			
+			for(int i=0;i<arrayStudents.size();++i)
+			{
+				threads.get(i).join();
+			}
+		}
+		catch(InterruptedException err)
+		{
+			err.printStackTrace();
+		}
+	}
+	
 	@Override
 	protected void paintComponent(Graphics g)
 	{
