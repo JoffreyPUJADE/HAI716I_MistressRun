@@ -10,6 +10,7 @@ public class Game
 {
 	private Classroom m_classroom;
 	private Window m_window;
+	private static Game m_instance = new Game();
 	
 	public Game()
 	{
@@ -28,5 +29,20 @@ public class Game
 		m_window.setVisible(true);
 		
 		m_window.repaint();
+	}
+	
+	public Classroom getClassroom()
+	{
+		return m_classroom;
+	}
+	
+	public void move()
+	{
+		m_classroom.moveFirstStudent(0, 0);
+	}
+	
+	public static Game getInstance()
+	{
+		return m_instance;
 	}
 }

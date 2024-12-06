@@ -4,12 +4,14 @@ import LoaderDataPack.ClassroomData;
 import LoaderDataPack.TileData;
 import LoaderDataPack.ClassroomLoader;
 import AlgoPack.Common;
+import AlgoPack.Pair;
 import TilePack.Tile;
 import TilePack.Floor;
 import TilePack.Board;
 import TilePack.Desk;
 import TilePack.StudentChair;
 import TilePack.TeacherChair;
+import CharacterPack.Character;
 import CharacterPack.Student;
 import CharacterPack.Mistress;
 
@@ -68,7 +70,7 @@ public class Classroom extends JPanel
 				switch(tilesDatas.get(i).get(j).getType())
 				{
 					case "floor":
-						m_classroom.get(i).add(new Floor());
+						m_classroom.get(i).add(new Floor(null));
 						m_students.get(i).add(null);
 						m_mistresses.get(i).add(null);
 					break;
@@ -86,15 +88,17 @@ public class Classroom extends JPanel
 					break;
 					
 					case "studentChair":
-						m_classroom.get(i).add(new StudentChair(orientation));
+						m_classroom.get(i).add(new StudentChair(orientation, null));
 						m_students.get(i).add(new Student((StudentChair)m_classroom.get(i).get(j)));
+						m_classroom.get(i).get(j).takeTile(m_students.get(i).get(j));
 						m_mistresses.get(i).add(null);
 					break;
 					
 					case "teacherChair":
-						m_classroom.get(i).add(new TeacherChair(orientation));
+						m_classroom.get(i).add(new TeacherChair(orientation, null));
 						m_students.get(i).add(null);
 						m_mistresses.get(i).add(new Mistress((TeacherChair)m_classroom.get(i).get(j)));
+						m_classroom.get(i).get(j).takeTile(m_mistresses.get(i).get(j));
 					break;
 					
 					default:
@@ -116,6 +120,91 @@ public class Classroom extends JPanel
 	public int getGlobalHeight()
 	{
 		return m_classroom.size() * m_tileSize;
+	}
+	
+	public ArrayList<ArrayList<Tile>> getTiles()
+	{
+		return m_classroom;
+	}
+	
+	public ArrayList<ArrayList<Student>> getStudents()
+	{
+		return m_students;
+	}
+	
+	public ArrayList<ArrayList<Mistress>> getMistresses()
+	{
+		return m_mistresses;
+	}
+	
+	public ArrayList<ArrayList<Character>> getCharacters()
+	{
+		ArrayList<ArrayList<Character>> arrayRes = new ArrayList<>();
+		
+		for(int i=0;i<m_students.size();++i)
+		{
+			arrayRes.add(new ArrayList<>());
+			
+			for(int j=0;j<m_students.get(i).size();++j)
+			{
+				arrayRes.get(i).add((Character)m_students.get(i).get(j));
+			}
+		}
+		
+		for(int i=0;i<m_mistresses.size();++i)
+		{
+			for(int j=0;j<m_mistresses.get(i).size();++j)
+			{
+				if(arrayRes.get(i).get(j) == null)
+				{
+					arrayRes.get(i).set(j, (Character)m_mistresses.get(i).get(j));
+				}
+			}
+		}
+		
+		return arrayRes;
+	}
+	
+	public void charPosChanged(ArrayList<ArrayList<Character>> charInClass, int oldX, int oldY, int newX, int newY)
+	{
+		boolean isStudent = (m_students.get(oldX).get(oldY) != null);
+		boolean isMistress = (m_mistresses.get(oldX).get(oldY) != null);
+		
+		if(isStudent)
+		{
+			m_students.get(oldX).set(oldY, null);
+			m_students.get(newX).set(newY, (Student)charInClass.get(newX).get(newY));
+		}
+		else if(isMistress)
+		{
+			m_mistresses.get(oldX).set(oldY, null);
+			m_mistresses.get(newX).set(newY, (Mistress)charInClass.get(newX).get(newY));
+		}
+	}
+	
+	public void moveFirstStudent(int a, int b)
+	{
+		Student student = null;
+		
+		int c = 0;
+		int d = 0;
+		
+		for(int i=0;i<m_students.size();++i)
+		{
+			for(int j=0;j<m_students.get(i).size();++j)
+			{
+				if(m_students.get(i).get(j) != null)
+				{
+					student = m_students.get(i).get(j);
+					c = i;
+					d = j;
+					
+					break;
+				}
+			}
+		}
+		
+		student.move(new Pair<Tile, int[]>((Tile)student.getChair(), new int[]{c, d}), new Pair<Tile, int[]>(m_classroom.get(a).get(b), new int[]{a, b}));
 	}
 	
 	@Override

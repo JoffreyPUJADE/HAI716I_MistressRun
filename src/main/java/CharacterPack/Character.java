@@ -1,15 +1,30 @@
 package CharacterPack;
 
 import AlgoPack.Common;
+import AlgoPack.Node;
+import AlgoPack.Pair;
 import TilePack.Chair;
+import TilePack.Tile;
+import MainPack.Game;
+import GraphicsPack.Classroom;
 
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Comparator;
+import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 import java.io.InputStream;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 public abstract class Character
 {
@@ -21,6 +36,7 @@ public abstract class Character
 	private int m_currentSpriteIndex;
 	private String m_direction;
 	protected Chair m_chair;
+	//protected Tile m_currentTile;
 	
 	public Character(String spriteSheet, Chair chair)
 	{
@@ -55,6 +71,74 @@ public abstract class Character
 		m_direction = direction;
 	}
 	
+	public boolean move(Pair<Tile, int[]> currentTile, Pair<Tile, int[]> targetTile)
+	{
+		boolean objectifReached = false;
+		
+		Game game = Game.getInstance();
+		Classroom classroom = game.getClassroom();
+		ArrayList<ArrayList<Tile>> arrayTiles = classroom.getTiles();
+		ArrayList<ArrayList<Character>> charInClass = classroom.getCharacters();
+		
+		Tile currentT = currentTile.getKey();
+		int[] currentPosition = currentTile.getValue();
+		
+		Tile targetT = targetTile.getKey();
+		int[] targetPosition = targetTile.getValue();
+		
+		List<Node> openList = new ArrayList<>();
+		Set<Node> closedList = new HashSet<>();
+		Map<Node, Node> cameFrom = new HashMap<>();
+		
+		Node startNode = new Node(currentPosition[0], currentPosition[1], null, 0, calculateHCost(currentPosition, targetPosition));
+		openList.add(startNode);
+		
+		while(!openList.isEmpty())
+		{
+			Node currentNode = openList.stream()
+						   .min(Comparator.comparingInt(node -> node.getFCost()))
+						   .orElseThrow(() -> new NoSuchElementException("Aucun noeud trouvé dans la liste ouverte"));
+			
+			openList.remove(currentNode);
+			closedList.add(currentNode);
+			
+			if(currentNode.getX() == targetPosition[0] && currentNode.getY() == targetPosition[1])
+			{
+				List<Node> path = reconstructPath(cameFrom, currentNode);
+				objectifReached = moveAlongPath(path, currentTile);
+				
+				break;
+			}
+			
+			List<Node> neighbors = getNeighbors(currentNode, arrayTiles, charInClass, targetPosition, this);
+			
+			for(Node neighbor : neighbors)
+			{
+				if(closedList.contains(neighbor))
+				{
+					continue;
+				}
+				
+				int tentativeGCost = currentNode.getGCost() + 1;  // Supposons que le coût pour chaque mouvement est de 1
+				
+				// Si ce nœud est dans la liste ouverte mais avec un coût plus élevé, on ignore ce voisin
+				if(!openList.contains(neighbor) || tentativeGCost < neighbor.getGCost())
+				{
+					cameFrom.put(neighbor, currentNode);  // Enregistrer le parent du voisin
+					neighbor.setGCost(tentativeGCost);
+					neighbor.setFCost(neighbor.getGCost() + neighbor.getHCost());
+					
+					if(!openList.contains(neighbor))
+					{
+						openList.add(neighbor);
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	public void updateAnimation()
 	{
 		m_currentSpriteIndex = (m_currentSpriteIndex + 1) % 3;
@@ -84,6 +168,107 @@ public abstract class Character
 		}
 		
 		g.drawImage(currentSprite, x, y, null);
+	}
+	
+	private int calculateHCost(int[] currentPosition, int[] targetPosition)
+	{
+		return Math.abs(currentPosition[0] - targetPosition[0]) + Math.abs(currentPosition[1] - targetPosition[1]);
+	}
+	
+	private List<Node> reconstructPath(Map<Node, Node> cameFrom, Node currentNode)
+	{
+		List<Node> path = new ArrayList<>();
+		
+		while(currentNode != null)
+		{
+			path.add(currentNode);
+			currentNode = cameFrom.get(currentNode);
+		}
+		
+		Collections.reverse(path);
+		
+		return path;
+	}
+	
+	private boolean moveAlongPath(List<Node> path, Pair<Tile, int[]> currentPosition)
+	{
+		Game game = Game.getInstance();
+		Classroom classroom = game.getClassroom();
+		ArrayList<ArrayList<Tile>> arrayTiles = classroom.getTiles();
+		ArrayList<ArrayList<Character>> charInClass = classroom.getCharacters();
+		
+		for(Node node : path)
+		{
+			Tile tile = arrayTiles.get(node.getX()).get(node.getY());
+			
+			if(!tile.isObstacle() && charInClass.get(node.getX()).get(node.getY()) == null)
+			{
+				int oldX = currentPosition.getValue()[0];
+				int oldY = currentPosition.getValue()[1];
+				int newX = node.getX();
+				int newY = node.getY();
+				
+				Tile currentTile = currentPosition.getKey();
+				currentTile.takeTile(null);
+				charInClass.get(oldX).set(oldY, null);
+				
+				currentPosition.setValue(new int[]{node.getX(), node.getY()});
+				tile.takeTile(this);
+				charInClass.get(newX).set(newY, this);
+				
+				classroom.charPosChanged(charInClass, oldX, oldY, newX, newY);
+				classroom.repaint();
+				
+				try
+				{
+					TimeUnit.MILLISECONDS.sleep(500);
+				}
+				catch(InterruptedException err)
+				{
+					Thread.currentThread().interrupt();
+				}
+				
+				if(node.getX() == path.get(path.size() - 1).getX() && node.getY() == path.get(path.size() - 1).getY())
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	private boolean isObstacle(ArrayList<ArrayList<Tile>> map, ArrayList<ArrayList<Character>> charInClass, int x, int y, Character currentChar)
+	{
+		return map.get(x).get(y).isObstacle() || (charInClass.get(x).get(y) != null && charInClass.get(x).get(y) != currentChar);
+	}
+	
+	private boolean isInBounds(int x, int y, ArrayList<ArrayList<Tile>> map)
+	{
+		return x >= 0 && x < map.size() && y >= 0 && y < map.get(x).size();
+	}
+	
+	private List<Node> getNeighbors(Node node, ArrayList<ArrayList<Tile>> map, ArrayList<ArrayList<Character>> charInClass, int[] targetPosition, Character currentChar)
+	{
+		List<Node> neighbors = new ArrayList<>();
+		
+		// Déplacements possibles (haut, bas, gauche, droite)
+		int[] dx = {-1, 1, 0, 0};
+		int[] dy = {0, 0, -1, 1};
+		
+		for(int i = 0; i < 4; i++)
+		{
+			int newX = node.getX() + dx[i];
+			int newY = node.getY() + dy[i];
+			
+			if (isInBounds(newX, newY, map) && !isObstacle(map, charInClass, newX, newY, currentChar))
+			{
+				int hCost = calculateHCost(new int[]{newX, newY}, targetPosition);
+				neighbors.add(new Node(newX, newY, node, node.getGCost() + 1, hCost));
+			}
+		}
+		
+		return neighbors;
 	}
 	
 	private void loadSprite(BufferedImage spriteSheet)

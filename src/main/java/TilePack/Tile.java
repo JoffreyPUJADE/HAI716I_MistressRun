@@ -1,6 +1,7 @@
 package TilePack;
 
 import AlgoPack.Common;
+import CharacterPack.Character;
 
 import java.io.InputStream;
 
@@ -8,12 +9,14 @@ public abstract class Tile
 {
 	protected String m_sprite;
 	protected boolean m_isObstacle;
+	protected Character m_occupiedBy;
 	protected InputStream m_spriteStream;
 	
-	public Tile(String resourceName, boolean isObstacle)
+	public Tile(String resourceName, boolean isObstacle, Character occupiedBy)
 	{
 		m_sprite = resourceName;
 		m_isObstacle = isObstacle;
+		m_occupiedBy = occupiedBy;
 		
 		m_spriteStream = Common.getStreamFromResource(m_sprite);
 	}
@@ -26,5 +29,15 @@ public abstract class Tile
 	public boolean isObstacle()
 	{
 		return m_isObstacle;
+	}
+	
+	public Character occupiedBy()
+	{
+		return m_occupiedBy;
+	}
+	
+	public void takeTile(Character character)
+	{
+		m_occupiedBy = character;
 	}
 }

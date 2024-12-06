@@ -1,9 +1,11 @@
 package TilePack;
 
+import CharacterPack.Character;
+
 public class Floor extends Tile
 {
-	public Floor()
+	public Floor(Character occupiedBy)
 	{
-		super("tiles/floor.png", false);
+		super("tiles/floor.png", false, occupiedBy);
 	}
 }
