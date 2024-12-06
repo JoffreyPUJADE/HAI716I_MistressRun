@@ -247,6 +247,7 @@ public class Classroom extends JPanel
 		
 		//student.move(new Pair<Tile, int[]>((Tile)student.getChair(), new int[]{c, d}), new Pair<Tile, int[]>(m_classroom.get(a).get(b), new int[]{a, b}));
 		student.goToNearestCandy();
+		student.goToChair();
 	}
 	
 	@Override

@@ -183,6 +183,12 @@ public abstract class Character
 		g.drawImage(currentSprite, x, y, null);
 	}
 	
+	@Override
+	public String toString()
+	{
+		return String.format("%s => SpriteSheet : %s ; CurrentSpriteIndex : %d ; Direction : %s ; Chair : %s", this.getClass().getSimpleName(), m_spriteSheet, m_currentSpriteIndex, m_direction, m_chair.toString());
+	}
+	
 	private int calculateHCost(int[] currentPosition, int[] targetPosition)
 	{
 		return Math.abs(currentPosition[0] - targetPosition[0]) + Math.abs(currentPosition[1] - targetPosition[1]);

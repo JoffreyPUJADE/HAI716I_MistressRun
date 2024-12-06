@@ -38,7 +38,7 @@ public class Game
 	
 	public void move()
 	{
-		m_classroom.moveFirstStudent(0, 0);
+		m_classroom.moveFirstStudent(0, 14);
 	}
 	
 	public static Game getInstance()

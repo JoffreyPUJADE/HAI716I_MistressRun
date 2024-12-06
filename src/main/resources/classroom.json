@@ -48,10 +48,10 @@
 		[
 			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
 			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "candy" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
 		],
 		[
-			{ "type": "candy" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
+			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
 			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
 			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
 		]

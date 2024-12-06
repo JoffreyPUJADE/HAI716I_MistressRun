@@ -76,8 +76,8 @@ public class Student extends Character
 			int maxX = Math.max(arrayCandies.get(i).getValue()[1], classroom.getTileCoords((Tile)m_chair)[1]);
 			int maxY = Math.max(arrayCandies.get(i).getValue()[0], classroom.getTileCoords((Tile)m_chair)[0]);
 			
-			int minX = Math.max(arrayCandies.get(i).getValue()[1], classroom.getTileCoords((Tile)m_chair)[1]);
-			int minY = Math.max(arrayCandies.get(i).getValue()[0], classroom.getTileCoords((Tile)m_chair)[0]);
+			int minX = Math.min(arrayCandies.get(i).getValue()[1], classroom.getTileCoords((Tile)m_chair)[1]);
+			int minY = Math.min(arrayCandies.get(i).getValue()[0], classroom.getTileCoords((Tile)m_chair)[0]);
 			
 			if(Common.distanceManhattan(maxX, maxY, minX, minY) < minDistance)
 			{
@@ -98,5 +98,11 @@ public class Student extends Character
 		Pair<Tile, int[]> currentPosition = getCurrentPosition();
 		
 		return move(currentPosition, candyPosition);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("%s ; CandyCounter : %d", super.toString(), m_candyCounter);
 	}
 }

@@ -40,4 +40,10 @@ public abstract class Tile
 	{
 		m_occupiedBy = character;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("%s => Sprite : %s ; IsObstacle : %b ; OccupiedBy : %s", this.getClass().getSimpleName(), m_sprite, m_isObstacle, m_occupiedBy == null ? "null" : "someone");
+	}
 }

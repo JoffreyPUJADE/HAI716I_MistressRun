@@ -45,4 +45,10 @@ public class Mistress extends Character
 		
 		return null;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("%s ; TouchedStudents : %d", super.toString(), m_touchedStudents);
+	}
 }

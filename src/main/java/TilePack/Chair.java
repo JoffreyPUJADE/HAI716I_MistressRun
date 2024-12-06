@@ -20,6 +20,12 @@ public abstract class Chair extends Tile
 		m_orientation = orientation;
 	}
 	
+	@Override
+	public String toString()
+	{
+		return String.format("%s ; Orientation : %s", super.toString(), m_orientation.toString());
+	}
+	
 	static private Orientation strToEnum(String str)
 	{
 		switch(str)
