@@ -9,6 +9,7 @@ import TilePack.Tile;
 import TilePack.Floor;
 import TilePack.Board;
 import TilePack.Desk;
+import TilePack.Candy;
 import TilePack.StudentChair;
 import TilePack.TeacherChair;
 import CharacterPack.Character;
@@ -83,6 +84,12 @@ public class Classroom extends JPanel
 					
 					case "desk":
 						m_classroom.get(i).add(new Desk());
+						m_students.get(i).add(null);
+						m_mistresses.get(i).add(null);
+					break;
+					
+					case "candy":
+						m_classroom.get(i).add(new Candy(Common.randint(1, Common.countFilesInResourcesSubdirectory("candies"))));
 						m_students.get(i).add(null);
 						m_mistresses.get(i).add(null);
 					break;

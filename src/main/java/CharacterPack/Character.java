@@ -136,7 +136,7 @@ public abstract class Character
 			}
 		}
 		
-		return false;
+		return objectifReached;
 	}
 	
 	public void updateAnimation()
