@@ -266,7 +266,8 @@ public class Classroom extends JPanel
 		}
 		
 		ArrayList<Thread> threads = new ArrayList<>();
-		
+		Thread t = null;
+
 		try
 		{
 			for(int i=0;i<arrayStudents.size();++i)
@@ -276,6 +277,19 @@ public class Classroom extends JPanel
 				threads.get(i).start();
 			}
 			
+			for(int i=0;i<m_mistresses.size();++i)
+			{
+				for(int j=0;j<m_mistresses.get(i).size();++j)
+				{
+					if(m_mistresses.get(i).get(j) != null)
+					{
+						t = new Thread(m_mistresses.get(i).get(j));
+					}
+				}
+			}
+
+			t.start();
+
 			for(int i=0;i<arrayStudents.size();++i)
 			{
 				threads.get(i).join();

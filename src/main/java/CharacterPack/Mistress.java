@@ -8,7 +8,7 @@ import GraphicsPack.Classroom;
 
 import java.util.ArrayList;
 
-public class Mistress extends Character
+public class Mistress extends Character implements Runnable
 {
 	private int m_touchedStudents;
 	
@@ -51,4 +51,58 @@ public class Mistress extends Character
 	{
 		return String.format("%s ; TouchedStudents : %d", super.toString(), m_touchedStudents);
 	}
+
+	public void followStudent()
+	{
+		Game game = Game.getInstance();
+		Classroom classroom = game.getClassroom();
+
+		ArrayList<ArrayList<Student>> listOfStudents = classroom.getStudents();
+
+		Pair<Tile, int[]> current = getCurrentPosition();
+
+
+		
+		for(int i = 0; i < listOfStudents.size(); i++)
+		{
+			for (int x = 0; x < listOfStudents.get(x).size(); x++)
+			{
+				if(listOfStudents.get(i).get(x).getCurrentPosition().getValue() != classroom.getTileCoords(listOfStudents.get(i).get(x).getChair()) )
+				{
+					//Pair<Tile, int[]> target = listOfStudents[i].getCurrentPosition();
+					move(current, listOfStudents.get(i).get(x).getCurrentPosition());
+
+				}
+
+			}
+
+		}
+
+		//if the position of the student and the student chair are not equal then
+		//move towards the student.
+		
+
+	}
+
+	public void getStudent()
+	{
+		Game game = Game.getInstance();
+		Classroom classroom = game.getClassroom();
+
+		classroom.getStudents();
+
+	}
+
+	public void run()
+	{
+		for(;;)
+		{
+
+			followStudent();
+
+		}
+	}
+	
+
+
 }
