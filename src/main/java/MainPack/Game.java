@@ -40,6 +40,8 @@ public class Game
 	{
 		//m_classroom.moveFirstStudent(0, 14);
 		m_classroom.moveAllStudentToCandy();
+		//m_classroom.moveMistress();
+		//m_classroom.moveMistressToFirstStudent();
 	}
 	
 	public static Game getInstance()

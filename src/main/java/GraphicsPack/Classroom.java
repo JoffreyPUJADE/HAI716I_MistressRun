@@ -19,11 +19,14 @@ import CharacterPack.Mistress;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.concurrent.locks.ReentrantLock;
 import java.io.IOException;
 
 public class Classroom extends JPanel
@@ -32,6 +35,8 @@ public class Classroom extends JPanel
 	private ArrayList<ArrayList<Student>> m_students;
 	private ArrayList<ArrayList<Mistress>> m_mistresses;
 	private int m_tileSize;
+	private final ReentrantLock m_lockUpdatePosition = new ReentrantLock();
+	private final ReentrantLock m_lockRepaint = new ReentrantLock();
 	
 	public Classroom()
 	{
@@ -96,7 +101,7 @@ public class Classroom extends JPanel
 					
 					case "studentChair":
 						m_classroom.get(i).add(new StudentChair(orientation, null));
-						m_students.get(i).add(new Student((StudentChair)m_classroom.get(i).get(j)));
+						m_students.get(i).add(new Student((StudentChair)m_classroom.get(i).get(j), i, j));
 						m_classroom.get(i).get(j).takeTile(m_students.get(i).get(j));
 						m_mistresses.get(i).add(null);
 					break;
@@ -104,7 +109,7 @@ public class Classroom extends JPanel
 					case "teacherChair":
 						m_classroom.get(i).add(new TeacherChair(orientation, null));
 						m_students.get(i).add(null);
-						m_mistresses.get(i).add(new Mistress((TeacherChair)m_classroom.get(i).get(j)));
+						m_mistresses.get(i).add(new Mistress((TeacherChair)m_classroom.get(i).get(j), i, j));
 						m_classroom.get(i).get(j).takeTile(m_mistresses.get(i).get(j));
 					break;
 					
@@ -206,26 +211,38 @@ public class Classroom extends JPanel
 		return arrayRes;
 	}
 	
-	public void charPosChanged(ArrayList<ArrayList<Character>> charInClass, int oldX, int oldY, int newX, int newY)
+	public synchronized void charPosChanged(/*ArrayList<ArrayList<Character>> charInClass, */ Character character, int oldX, int oldY, int newX, int newY)
 	{
-		boolean isStudent = (m_students.get(oldX).get(oldY) != null);
-		boolean isMistress = (m_mistresses.get(oldX).get(oldY) != null);
+		/*boolean isStudent = (m_students.get(oldX).get(oldY) != null);// && m_students.get(oldX).get(oldY) instanceof Student;
+		boolean isMistress = (m_mistresses.get(oldX).get(oldY) != null);*/
 		
-		if(isStudent)
+		m_lockUpdatePosition.lock();
+		try
 		{
-			m_students.get(oldX).set(oldY, null);
-			m_students.get(newX).set(newY, (Student)charInClass.get(newX).get(newY));
+			Student student = character instanceof Student ? (Student)character : null;
+			Mistress mistress = character instanceof Mistress ? (Mistress)character : null;
+			
+			if(student != null)
+			{
+				m_students.get(oldX).set(oldY, null);
+				m_students.get(newX).set(newY, student);
+			}
+			else if(mistress != null)
+			{
+				m_mistresses.get(oldX).set(oldY, null);
+				m_mistresses.get(newX).set(newY, mistress);
+			}
 		}
-		else if(isMistress)
+		finally
 		{
-			m_mistresses.get(oldX).set(oldY, null);
-			m_mistresses.get(newX).set(newY, (Mistress)charInClass.get(newX).get(newY));
+			m_lockUpdatePosition.unlock();
 		}
 	}
 	
 	public void moveFirstStudent(int a, int b)
 	{
 		Student student = null;
+		Mistress mistress = null;
 		
 		int c = 0;
 		int d = 0;
@@ -240,14 +257,29 @@ public class Classroom extends JPanel
 					c = i;
 					d = j;
 					
+					System.out.println(i + " " + j);
+					
 					break;
 				}
 			}
 		}
 		
+		for(int i=0;i<m_mistresses.size();++i)
+		{
+			for(int j=0;j<m_mistresses.get(i).size();++j)
+			{
+				if(m_mistresses.get(i).get(j) != null)
+				{
+					mistress = m_mistresses.get(i).get(j);
+				}
+			}
+		}
+		
 		//student.move(new Pair<Tile, int[]>((Tile)student.getChair(), new int[]{c, d}), new Pair<Tile, int[]>(m_classroom.get(a).get(b), new int[]{a, b}));
-		student.goToNearestCandy();
-		student.goToChair();
+		student.tryToGoAtCandy();
+		System.out.println(student.getCurrentPosition().getValue()[0] + ", " + student.getCurrentPosition().getValue()[1]);
+		mistress.followStudent();
+		//student.goToChair();
 	}
 	
 	public void moveAllStudentToCandy()
@@ -301,10 +333,70 @@ public class Classroom extends JPanel
 		}
 	}
 	
-	@Override
-	protected void paintComponent(Graphics g)
+	public void moveMistress()
 	{
+		Mistress mistress = null;
+		
+		for(int i=0;i<m_mistresses.size();++i)
+		{
+			for(int j=0;j<m_mistresses.get(i).size();++j)
+			{
+				if(m_mistresses.get(i).get(j) != null)
+				{
+					mistress = m_mistresses.get(i).get(j);
+				}
+			}
+		}
+		
+		int a = 0;
+		int b = 0;
+		
+		mistress.move(mistress.getCurrentPosition(), new Pair<Tile, int[]>(m_classroom.get(a).get(b), new int[]{a, b}));
+	}
+	
+	public void moveMistressToFirstStudent()
+	{
+		Student student = null;
+		Mistress mistress = null;
+		
+		for(int i=0;i<m_students.size();++i)
+		{
+			for(int j=0;j<m_students.get(i).size();++j)
+			{
+				if(m_students.get(i).get(j) != null)
+				{
+					student = m_students.get(i).get(j);
+					
+					break;
+				}
+			}
+		}
+		
+		for(int i=0;i<m_mistresses.size();++i)
+		{
+			for(int j=0;j<m_mistresses.get(i).size();++j)
+			{
+				if(m_mistresses.get(i).get(j) != null)
+				{
+					mistress = m_mistresses.get(i).get(j);
+				}
+			}
+		}
+		
+		mistress.move(mistress.getCurrentPosition(), student.getCurrentPosition());
+	}
+	
+	@Override
+	protected synchronized void paintComponent(Graphics g)
+	{
+		m_lockRepaint.lock();
+		
+		try
+		{
 		super.paintComponent(g);
+		 Graphics2D g2d = (Graphics2D) g;
+    g2d.setColor(Color.WHITE); // Fond blanc
+    g2d.fillRect(0, 0, getWidth(), getHeight()); // Efface le dessin précédent
 		
 		// Dessin classe.
 		for(int i=0;i<m_classroom.size();++i)
@@ -356,6 +448,8 @@ public class Classroom extends JPanel
 				}
 			}
 		}
+		}
+		finally{m_lockRepaint.unlock();}
 	}
 	
 	private boolean verifyOrientation(String type, String orientation)

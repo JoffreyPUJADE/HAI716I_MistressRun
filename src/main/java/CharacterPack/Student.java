@@ -13,12 +13,14 @@ import java.util.ArrayList;
 public class Student extends Character implements Runnable
 {
 	private int m_candyCounter;
+	private boolean m_returningToChair;
 	
-	public Student(StudentChair chair)
+	public Student(StudentChair chair, int i, int j)
 	{
-		super("sprites/students.png", chair);
+		super("sprites/students.png", chair, i, j);
 		
 		m_candyCounter = 0;
+		m_returningToChair = false;
 	}
 	
 	public int getCandyCounter()
@@ -26,7 +28,7 @@ public class Student extends Character implements Runnable
 		return m_candyCounter;
 	}
 	
-	@Override
+	/*@Override
 	public Pair<Tile, int[]> getCurrentPosition()
 	{
 		Game game = Game.getInstance();
@@ -45,8 +47,8 @@ public class Student extends Character implements Runnable
 			}
 		}
 		
-		return null;
-	}
+		return new Pair<>(null, new int[]{-1, -1});
+	}*/
 	
 	public void setCandyCounter(int candyCounter)
 	{
@@ -61,6 +63,20 @@ public class Student extends Character implements Runnable
 	public void decrementCandyCounter()
 	{
 		--m_candyCounter;
+	}
+	
+	public boolean isEscaping()
+	{
+		return !isAtChair() && !m_returningToChair;
+	}
+	
+	@Override
+	public boolean goToChair()
+	{
+		m_returningToChair = true;
+		m_returningToChair = !super.goToChair();
+		
+		return !m_returningToChair;
 	}
 	
 	public Candy findNearestCandy()
@@ -100,6 +116,37 @@ public class Student extends Character implements Runnable
 		return move(currentPosition, candyPosition);
 	}
 	
+	public boolean candyIsAtOneCaseOrLess()
+	{
+		Game game = Game.getInstance();
+		Classroom classroom = game.getClassroom();
+		Candy nearestCandy = findNearestCandy();
+		Pair<Tile, int[]> candyPosition = new Pair<Tile, int[]>((Tile)nearestCandy, classroom.getTileCoords((Tile)nearestCandy));
+		Pair<Tile, int[]> currentPosition = getCurrentPosition();
+		
+		int maxX = Math.max(candyPosition.getValue()[1], currentPosition.getValue()[1]);
+		int maxY = Math.max(candyPosition.getValue()[0], currentPosition.getValue()[0]);
+		
+		int minX = Math.min(candyPosition.getValue()[1], currentPosition.getValue()[1]);
+		int minY = Math.min(candyPosition.getValue()[0], currentPosition.getValue()[0]);
+		
+		return Common.distanceManhattan(maxX, maxY, minX, minY) <= 1;
+	}
+	
+	public boolean tryToGoAtCandy()
+	{
+		// Potentially, where the students' strategy(ies) will be implemented.
+		
+		if(goToNearestCandy() && candyIsAtOneCaseOrLess())
+		{
+			++m_candyCounter;
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
 	@Override
 	public String toString()
 	{
@@ -108,7 +155,7 @@ public class Student extends Character implements Runnable
 	
 	public void run()
 	{
-		goToNearestCandy();
+		tryToGoAtCandy();
 		goToChair();
 	}
 }

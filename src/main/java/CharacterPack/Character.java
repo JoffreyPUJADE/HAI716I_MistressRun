@@ -36,12 +36,15 @@ public abstract class Character
 	private int m_currentSpriteIndex;
 	private String m_direction;
 	protected Chair m_chair;
+	protected int m_moveSleepDuration;
+	static private Map<Character, Pair<Tile, int[]>> m_positions = new HashMap<>();
 	//protected Tile m_currentTile;
 	
-	public Character(String spriteSheet, Chair chair)
+	public Character(String spriteSheet, Chair chair, int i, int j)
 	{
 		m_spriteSheet = spriteSheet;
 		m_chair = chair;
+		m_positions.put(this, new Pair<>((Tile)m_chair, new int[]{i, j}));
 		
 		InputStream is = Common.getStreamFromResource(m_spriteSheet);
 		BufferedImage image = null;
@@ -59,6 +62,8 @@ public abstract class Character
 		
 		m_currentSpriteIndex = 0;
 		m_direction = "down";
+		
+		m_moveSleepDuration = 500;
 	}
 	
 	public Chair getChair()
@@ -66,11 +71,27 @@ public abstract class Character
 		return m_chair;
 	}
 	
-	public abstract Pair<Tile, int[]> getCurrentPosition();
+	//public abstract Pair<Tile, int[]> getCurrentPosition();
+	
+	public Pair<Tile, int[]> getCurrentPosition()
+	{
+		return m_positions.get(this);
+	}
 	
 	public void setDirection(String direction)
 	{
 		m_direction = direction;
+	}
+	
+	public boolean isAtChair()
+	{
+		Game game = Game.getInstance();
+		Classroom classroom = game.getClassroom();
+		
+		int[] currentPosition = getCurrentPosition().getValue();
+		int[] chairPosition = classroom.getTileCoords((Tile)m_chair);
+		
+		return ((currentPosition[0] == chairPosition[0]) && (currentPosition[1] == chairPosition[1]));
 	}
 	
 	public boolean goToChair()
@@ -86,6 +107,11 @@ public abstract class Character
 	
 	public boolean move(Pair<Tile, int[]> currentTile, Pair<Tile, int[]> targetTile)
 	{
+		/*if(this instanceof Mistress)
+		{
+			System.out.println("A*");
+			System.out.println(getCurrentPosition().getValue()[0] + " " + getCurrentPosition().getValue()[1]);
+		}*/
 		boolean objectifReached = false;
 		
 		Game game = Game.getInstance();
@@ -108,6 +134,7 @@ public abstract class Character
 		
 		while(!openList.isEmpty())
 		{
+			//System.out.println("While loop");
 			Node currentNode = openList.stream()
 						   .min(Comparator.comparingInt(node -> node.getFCost()))
 						   .orElseThrow(() -> new NoSuchElementException("Aucun noeud trouvé dans la liste ouverte"));
@@ -186,13 +213,45 @@ public abstract class Character
 	@Override
 	public String toString()
 	{
-		return String.format("%s => SpriteSheet : %s ; CurrentSpriteIndex : %d ; Direction : %s ; Chair : %s", this.getClass().getSimpleName(), m_spriteSheet, m_currentSpriteIndex, m_direction, m_chair.toString());
+		Pair<Tile, int[]> currentPosition = getCurrentPosition();
+		return String.format("%s => SpriteSheet : %s ; CurrentSpriteIndex : %d ; Direction : %s ; Chair : %s ; CurrentPosition : [%d, %d]", this.getClass().getSimpleName(), m_spriteSheet, m_currentSpriteIndex, m_direction, m_chair.toString(), currentPosition.getValue()[0], currentPosition.getValue()[1]);
 	}
 	
 	private int calculateHCost(int[] currentPosition, int[] targetPosition)
 	{
-		return Math.abs(currentPosition[0] - targetPosition[0]) + Math.abs(currentPosition[1] - targetPosition[1]);
+		int dx = Math.abs(currentPosition[0] - targetPosition[0]);
+		int dy = Math.abs(currentPosition[1] - targetPosition[1]);
+		return dx + dy + (int)(0.1 * Math.max(dx, dy));
+		//return Math.abs(currentPosition[0] - targetPosition[0]) + Math.abs(currentPosition[1] - targetPosition[1]);
 	}
+	/*private int calculateHCost(int[] currentPosition, int[] targetPosition) {
+    int dx = Math.abs(currentPosition[0] - targetPosition[0]);
+    int dy = Math.abs(currentPosition[1] - targetPosition[1]);
+    
+    // Ajouter un coût si une tuile directement adjacente est un obstacle
+    int penalty = 0;
+    if (isObstacleAhead(currentPosition, targetPosition)) {
+        penalty = 10; // Pénalité pour encourager les détours
+    }
+
+    return dx + dy + penalty;
+}
+
+private boolean isObstacleAhead(int[] currentPosition, int[] targetPosition) {
+    // Détection d'un obstacle dans la direction du mouvement
+    int dx = Integer.compare(targetPosition[0], currentPosition[0]);
+    int dy = Integer.compare(targetPosition[1], currentPosition[1]);
+
+    int nextX = currentPosition[0] + dx;
+    int nextY = currentPosition[1] + dy;
+
+    Game game = Game.getInstance();
+    Classroom classroom = game.getClassroom();
+    ArrayList<ArrayList<Tile>> map = classroom.getTiles();
+    ArrayList<ArrayList<Character>> charInClass = classroom.getCharacters();
+
+    return isInBounds(nextX, nextY, map) && isObstacle(map, charInClass, nextX, nextY, this);
+}*/
 	
 	private List<Node> reconstructPath(Map<Node, Node> cameFrom, Node currentNode)
 	{
@@ -234,13 +293,15 @@ public abstract class Character
 				currentPosition.setValue(new int[]{node.getX(), node.getY()});
 				tile.takeTile(this);
 				charInClass.get(newX).set(newY, this);
+				//System.out.println("[" + getCurrentPosition().getValue()[0] + "[" + getCurrentPosition().getValue()[1]);
 				
-				classroom.charPosChanged(charInClass, oldX, oldY, newX, newY);
+				classroom.charPosChanged(/*charInClass*/charInClass.get(newX).get(newY), oldX, oldY, newX, newY);
+				updatePosition(this, tile, new int[]{newX, newY});
 				classroom.repaint();
 				
 				try
 				{
-					TimeUnit.MILLISECONDS.sleep(500);
+					TimeUnit.MILLISECONDS.sleep(m_moveSleepDuration);
 				}
 				catch(InterruptedException err)
 				{
@@ -257,12 +318,12 @@ public abstract class Character
 		return false;
 	}
 	
-	private boolean isObstacle(ArrayList<ArrayList<Tile>> map, ArrayList<ArrayList<Character>> charInClass, int x, int y, Character currentChar)
+	protected boolean isObstacle(ArrayList<ArrayList<Tile>> map, ArrayList<ArrayList<Character>> charInClass, int x, int y, Character currentChar)
 	{
 		return map.get(x).get(y).isObstacle() || (charInClass.get(x).get(y) != null && charInClass.get(x).get(y) != currentChar) || ((map.get(x).get(y) instanceof Chair) && (((Chair)map.get(x).get(y)) != m_chair));
 	}
 	
-	private boolean isInBounds(int x, int y, ArrayList<ArrayList<Tile>> map)
+	protected boolean isInBounds(int x, int y, ArrayList<ArrayList<Tile>> map)
 	{
 		return x >= 0 && x < map.size() && y >= 0 && y < map.get(x).size();
 	}
@@ -275,7 +336,7 @@ public abstract class Character
 		int[] dx = {-1, 1, 0, 0};
 		int[] dy = {0, 0, -1, 1};
 		
-		for(int i = 0; i < 4; i++)
+		for(int i=0;i<4;++i)
 		{
 			int newX = node.getX() + dx[i];
 			int newY = node.getY() + dy[i];
@@ -321,5 +382,12 @@ public abstract class Character
 		}
 		
 		return flipped;
+	}
+	
+	static private void updatePosition(Character character, Tile tile, int[] position)
+	{
+		//System.out.println("Position updated to [" + position[0] + ", " + position[1]);
+		m_positions.put(character, new Pair<>(tile, position));
+		//System.out.println("Position updated in map to [" + m_positions.get(character).getValue()[0] + ", " + m_positions.get(character).getValue()[1]);
 	}
 }
