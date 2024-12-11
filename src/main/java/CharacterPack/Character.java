@@ -9,7 +9,7 @@ import MainPack.Game;
 import GraphicsPack.Classroom;
 
 import java.awt.Graphics;
-import java.awt.Image;
+//import java.awt.Image;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Comparator;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -38,6 +39,7 @@ public abstract class Character
 	protected Chair m_chair;
 	protected int m_moveSleepDuration;
 	static private Map<Character, Pair<Tile, int[]>> m_positions = new HashMap<>();
+	static private final ReentrantLock m_lockMoveAlongPath = new ReentrantLock();
 	//protected Tile m_currentTile;
 	
 	public Character(String spriteSheet, Chair chair, int i, int j)
@@ -82,6 +84,9 @@ public abstract class Character
 	{
 		m_direction = direction;
 	}
+
+	public abstract boolean isTouched();
+	public abstract boolean isEscaping();
 	
 	public boolean isAtChair()
 	{
@@ -119,10 +124,10 @@ public abstract class Character
 		ArrayList<ArrayList<Tile>> arrayTiles = classroom.getTiles();
 		ArrayList<ArrayList<Character>> charInClass = classroom.getCharacters();
 		
-		Tile currentT = currentTile.getKey();
+		//Tile currentT = currentTile.getKey();
 		int[] currentPosition = currentTile.getValue();
 		
-		Tile targetT = targetTile.getKey();
+		//Tile targetT = targetTile.getKey();
 		int[] targetPosition = targetTile.getValue();
 		
 		List<Node> openList = new ArrayList<>();
@@ -134,6 +139,11 @@ public abstract class Character
 		
 		while(!openList.isEmpty())
 		{
+			if(isEscaping() && isTouched())
+			{
+				return false;
+			}
+
 			//System.out.println("While loop");
 			Node currentNode = openList.stream()
 						   .min(Comparator.comparingInt(node -> node.getFCost()))
@@ -277,42 +287,55 @@ private boolean isObstacleAhead(int[] currentPosition, int[] targetPosition) {
 		
 		for(Node node : path)
 		{
-			Tile tile = arrayTiles.get(node.getX()).get(node.getY());
-			
-			if(!tile.isObstacle() && charInClass.get(node.getX()).get(node.getY()) == null)
+			if(isTouched() && isEscaping())
 			{
-				int oldX = currentPosition.getValue()[0];
-				int oldY = currentPosition.getValue()[1];
-				int newX = node.getX();
-				int newY = node.getY();
-				
-				Tile currentTile = currentPosition.getKey();
-				currentTile.takeTile(null);
-				charInClass.get(oldX).set(oldY, null);
-				
-				currentPosition.setValue(new int[]{node.getX(), node.getY()});
-				tile.takeTile(this);
-				charInClass.get(newX).set(newY, this);
-				//System.out.println("[" + getCurrentPosition().getValue()[0] + "[" + getCurrentPosition().getValue()[1]);
-				
-				classroom.charPosChanged(/*charInClass*/charInClass.get(newX).get(newY), oldX, oldY, newX, newY);
-				updatePosition(this, tile, new int[]{newX, newY});
-				classroom.repaint();
-				
-				try
-				{
-					TimeUnit.MILLISECONDS.sleep(m_moveSleepDuration);
-				}
-				catch(InterruptedException err)
-				{
-					Thread.currentThread().interrupt();
-				}
-				
-				if(node.getX() == path.get(path.size() - 1).getX() && node.getY() == path.get(path.size() - 1).getY())
-				{
-					return true;
-				}
+				return false;
 			}
+			/*m_lockMoveAlongPath.lock();
+			try
+			{*/
+				Tile tile = arrayTiles.get(node.getX()).get(node.getY());
+				
+				if(!tile.isObstacle() && charInClass.get(node.getX()).get(node.getY()) == null)
+				{
+						int oldX = currentPosition.getValue()[0];
+						int oldY = currentPosition.getValue()[1];
+						int newX = node.getX();
+						int newY = node.getY();
+						
+						Tile currentTile = currentPosition.getKey();
+						currentTile.takeTile(null);
+						charInClass.get(oldX).set(oldY, null);
+						
+						currentPosition.setValue(new int[]{node.getX(), node.getY()});
+						tile.takeTile(this);
+						//charInClass.get(newX).set(newY, this);
+						//System.out.println("[" + getCurrentPosition().getValue()[0] + "[" + getCurrentPosition().getValue()[1]);
+						
+						classroom.charPosChanged(/*charInClass*/this, oldX, oldY, newX, newY);
+						updatePosition(this, tile, new int[]{newX, newY});
+						classroom.repaint();
+					
+					try
+					{
+						TimeUnit.MILLISECONDS.sleep(m_moveSleepDuration);
+					}
+					catch(InterruptedException err)
+					{
+						Thread.currentThread().interrupt();
+					}
+					
+					
+					if(node.getX() == path.get(path.size() - 1).getX() && node.getY() == path.get(path.size() - 1).getY())
+					{
+						return true;
+					}
+				}
+			/* }
+			finally
+			{
+				m_lockMoveAlongPath.unlock();
+			}*/
 		}
 		
 		return false;

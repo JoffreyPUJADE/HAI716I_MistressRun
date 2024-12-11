@@ -210,6 +210,24 @@ public class Classroom extends JPanel
 		
 		return arrayRes;
 	}
+
+	public int getStudentsCount()
+	{
+		int studentsCounter = 0;
+
+		for(int i=0;i<m_students.size();++i)
+		{
+			for(int j=0;j<m_students.get(i).size();++j)
+			{
+				if(m_students.get(i).get(j) != null)
+				{
+					++studentsCounter;
+				}
+			}
+		}
+
+		return studentsCounter;
+	}
 	
 	public synchronized void charPosChanged(/*ArrayList<ArrayList<Character>> charInClass, */ Character character, int oldX, int oldY, int newX, int newY)
 	{
@@ -232,6 +250,11 @@ public class Classroom extends JPanel
 				m_mistresses.get(oldX).set(oldY, null);
 				m_mistresses.get(newX).set(newY, mistress);
 			}
+
+			if(student != null)
+			{
+				System.out.println("Students counter : " + getStudentsCount());
+			}
 		}
 		finally
 		{
@@ -244,8 +267,8 @@ public class Classroom extends JPanel
 		Student student = null;
 		Mistress mistress = null;
 		
-		int c = 0;
-		int d = 0;
+		/*int c = 0;
+		int d = 0;*/
 		
 		for(int i=0;i<m_students.size();++i)
 		{
@@ -254,8 +277,8 @@ public class Classroom extends JPanel
 				if(m_students.get(i).get(j) != null)
 				{
 					student = m_students.get(i).get(j);
-					c = i;
-					d = j;
+					/*c = i;
+					d = j;*/
 					
 					System.out.println(i + " " + j);
 					

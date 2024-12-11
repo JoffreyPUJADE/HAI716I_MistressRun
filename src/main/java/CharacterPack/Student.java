@@ -14,6 +14,7 @@ public class Student extends Character implements Runnable
 {
 	private int m_candyCounter;
 	private boolean m_returningToChair;
+	private boolean m_touched;
 	
 	public Student(StudentChair chair, int i, int j)
 	{
@@ -21,6 +22,7 @@ public class Student extends Character implements Runnable
 		
 		m_candyCounter = 0;
 		m_returningToChair = false;
+		m_touched = false;
 	}
 	
 	public int getCandyCounter()
@@ -54,6 +56,33 @@ public class Student extends Character implements Runnable
 	{
 		m_candyCounter = candyCounter;
 	}
+
+	@Override
+	public boolean isTouched()
+	{
+		return m_touched;
+	}
+
+	@Override
+	public boolean isEscaping()
+	{
+		return !isAtChair() && !m_returningToChair;
+	}
+
+	public boolean touched()
+{
+    if (m_touched) {
+        return false; // L'étudiant est déjà touché et retourné à sa chaise
+    }
+    m_touched = true;
+    /*boolean success = goToChair();
+    if (success) {
+        m_touched = false; // Réinitialiser l'état une fois l'étudiant retourné à sa chaise
+    }
+    return success;*/
+	return true;
+}
+
 	
 	public void incrementCandyCounter()
 	{
@@ -65,19 +94,19 @@ public class Student extends Character implements Runnable
 		--m_candyCounter;
 	}
 	
-	public boolean isEscaping()
-	{
-		return !isAtChair() && !m_returningToChair;
-	}
-	
 	@Override
-	public boolean goToChair()
-	{
-		m_returningToChair = true;
-		m_returningToChair = !super.goToChair();
-		
-		return !m_returningToChair;
-	}
+public boolean goToChair()
+{
+    if (m_returningToChair) {
+        return false; // L'étudiant est déjà en train de revenir à sa chaise
+    }
+    m_returningToChair = true;
+    boolean result = !super.goToChair(); // Effectuer le déplacement vers la chaise
+    m_returningToChair = false; // Réinitialiser l'état de retour
+    m_touched = false;
+    return result;
+}
+
 	
 	public Candy findNearestCandy()
 	{
