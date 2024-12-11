@@ -27,63 +27,43 @@ public class Mistress extends Character implements Runnable
 		return m_touchedStudents;
 	}
 	
-	/*@Override
-	public Pair<Tile, int[]> getCurrentPosition()
+	public ArrayList<Student> getStudentsAround(ArrayList<ArrayList<Student>> arrayStudents, ArrayList<ArrayList<Tile>> arrayTiles)
 	{
-		Game game = Game.getInstance();
-		Classroom classroom = game.getClassroom();
-		ArrayList<ArrayList<Tile>> arrayTiles = classroom.getTiles();
-		ArrayList<ArrayList<Mistress>> arrayMistresses = classroom.getMistresses();
-		
-		for(int i=0;i<arrayMistresses.size();++i)
+		m_lock.lock();
+		ArrayList<Student> studentsAround = new ArrayList<>();
+
+		try
 		{
-			for(int j=0;j<arrayMistresses.get(i).size();++j)
+			Pair<Tile, int[]> currentPosition = getCurrentPosition();
+
+			// Possible positions (up, down, left, right)
+			int[] dx = {-1, 1, 0, 0};
+			int[] dy = {0, 0, -1, 1};
+
+			for(int i=0;i<4;++i)
 			{
-				if(arrayMistresses.get(i).get(j) == this)
+				int newX = currentPosition.getValue()[0] + dx[i];
+				int newY = currentPosition.getValue()[1] + dy[i];
+
+				if(isInBounds(newX, newY, arrayTiles) && arrayStudents.get(newX).get(newY) != null)
 				{
-					return new Pair<Tile, int[]>(arrayTiles.get(i).get(j), new int[]{i, j});
+					Student student = arrayStudents.get(newX).get(newY);
+
+					// Check that the student hasn't already been hit.
+					if(!student.isTouched())
+					{
+						studentsAround.add(student);
+					}
 				}
 			}
 		}
-		
-		return null;
-	}*/
-	
-	public ArrayList<Student> getStudentsAround(ArrayList<ArrayList<Student>> arrayStudents, ArrayList<ArrayList<Tile>> arrayTiles)
-{
-    m_lock.lock();
-    ArrayList<Student> studentsAround = new ArrayList<>();
+		finally
+		{
+			m_lock.unlock();
+		}
 
-    try
-    {
-        Pair<Tile, int[]> currentPosition = getCurrentPosition();
-        
-        // Positions possibles (haut, bas, gauche, droite)
-        int[] dx = {-1, 1, 0, 0};
-        int[] dy = {0, 0, -1, 1};
-        
-        for(int i=0;i<4;++i)
-        {
-            int newX = currentPosition.getValue()[0] + dx[i];
-            int newY = currentPosition.getValue()[1] + dy[i];
-            
-            if(isInBounds(newX, newY, arrayTiles) && arrayStudents.get(newX).get(newY) != null)
-            {
-                Student student = arrayStudents.get(newX).get(newY);
-                // Vérifiez si l'étudiant est déjà touché
-                if (!student.isTouched()) {
-                    studentsAround.add(student);
-                }
-            }
-        }
-    }
-    finally
-    {
-        m_lock.unlock();
-    }
-    
-    return studentsAround;
-}
+		return studentsAround;
+	}
 
 	
 	public ArrayList<Student> getEscapingStudents(ArrayList<ArrayList<Student>> arrayStudents)
@@ -126,82 +106,58 @@ public class Mistress extends Character implements Runnable
 	{
 		return false;
 	}
+
+	public void followStudent()
+	{
+		Game game = Game.getInstance();
+		Classroom classroom = game.getClassroom();
+		ArrayList<ArrayList<Tile>> arrayTiles = classroom.getTiles();
+		ArrayList<ArrayList<Student>> students = classroom.getStudents();
+		ArrayList<Student> escapingStudents = getEscapingStudents(students);
+		
+		for(Student escapingStudent : escapingStudents)
+		{
+			// Moving towards the escaping student.
+			move(getCurrentPosition(), escapingStudent.getCurrentPosition());
+
+			// Checking nearby students.
+			ArrayList<Student> nearbyStudents = getStudentsAround(students, arrayTiles);
+			boolean touchedNearby = false;
+
+			for(Student nearbyStudent : nearbyStudents)
+			{
+				if(nearbyStudent.isEscaping() && !nearbyStudent.isTouched())
+				{
+					nearbyStudent.touched();
+					touchedNearby = true;
+					break; // We stop as soon as we touch a student.
+				}
+			}
+
+			if(!touchedNearby)
+			{
+				System.out.println("really no way");
+			}
+		}
+	}
 	
 	@Override
 	public String toString()
 	{
 		return String.format("%s ; TouchedStudents : %d", super.toString(), m_touchedStudents);
 	}
-	
-	public boolean touchStudent(Student student)
+
+	public void run()
 	{
-		System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-		//student.goToChair();
-		student.touched();
-		++m_touchedStudents;
-		return true;
+		while(true)
+		{
+			followStudent();
+		}
 	}
 
-	public void followStudent() {
-		Game game = Game.getInstance();
-		Classroom classroom = game.getClassroom();
-		ArrayList<ArrayList<Tile>> arrayTiles = classroom.getTiles();
-		ArrayList<ArrayList<Student>> students = classroom.getStudents();
-    	ArrayList<Student> escapingStudents = getEscapingStudents(students);
-    
-    for (Student escapingStudent : escapingStudents) {
-        // Déplacer vers l'étudiant qui s'échappe
-        boolean isOverStudent = move(getCurrentPosition(), escapingStudent.getCurrentPosition());
-
-        if (isOverStudent) {
-            // Si on est au-dessus d'un étudiant qui s'échappe, on le touche
-           // touchStudent(escapingStudent);
-        } else {
-            // Vérifier les étudiants à proximité
-            ArrayList<Student> nearbyStudents = getStudentsAround(students, arrayTiles);
-            boolean touchedNearby = false;
-            
-            for (Student nearbyStudent : nearbyStudents) {
-                if (nearbyStudent.isEscaping() && !nearbyStudent.isTouched()) {
-                    //touchStudent(nearbyStudent);
-					nearbyStudent.touched();
-                    touchedNearby = true;
-                    break; // On arrête dès qu'on touche un étudiant
-                }
-            }
-
-            if (!touchedNearby) {
-                System.out.println("really no way");
-            }
-        }
-    }
-}
-
-	
 	@Override
 	protected boolean isObstacle(ArrayList<ArrayList<Tile>> map, ArrayList<ArrayList<Character>> charInClass, int x, int y, Character currentChar)
 	{
 		return map.get(x).get(y).isObstacle();
-	}
-
-	public void getStudent()
-	{
-		Game game = Game.getInstance();
-		Classroom classroom = game.getClassroom();
-
-		classroom.getStudents();
-
-	}
-
-	public void run()
-	{
-		/*for(;;)
-		{
-
-			followStudent();
-
-		}*/
-		while(true)
-		followStudent();
 	}
 }

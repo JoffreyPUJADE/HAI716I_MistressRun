@@ -30,28 +30,6 @@ public class Student extends Character implements Runnable
 		return m_candyCounter;
 	}
 	
-	/*@Override
-	public Pair<Tile, int[]> getCurrentPosition()
-	{
-		Game game = Game.getInstance();
-		Classroom classroom = game.getClassroom();
-		ArrayList<ArrayList<Tile>> arrayTiles = classroom.getTiles();
-		ArrayList<ArrayList<Student>> arrayStudents = classroom.getStudents();
-		
-		for(int i=0;i<arrayStudents.size();++i)
-		{
-			for(int j=0;j<arrayStudents.get(i).size();++j)
-			{
-				if(arrayStudents.get(i).get(j) == this)
-				{
-					return new Pair<Tile, int[]>(arrayTiles.get(i).get(j), new int[]{i, j});
-				}
-			}
-		}
-		
-		return new Pair<>(null, new int[]{-1, -1});
-	}*/
-	
 	public void setCandyCounter(int candyCounter)
 	{
 		m_candyCounter = candyCounter;
@@ -70,18 +48,16 @@ public class Student extends Character implements Runnable
 	}
 
 	public boolean touched()
-{
-    if (m_touched) {
-        return false; // L'étudiant est déjà touché et retourné à sa chaise
-    }
-    m_touched = true;
-    /*boolean success = goToChair();
-    if (success) {
-        m_touched = false; // Réinitialiser l'état une fois l'étudiant retourné à sa chaise
-    }
-    return success;*/
-	return true;
-}
+	{
+		if(m_touched)
+		{
+			return false; // The student is already touched and is going back to his chair.
+		}
+
+		m_touched = true;
+
+		return true;
+	}
 
 	
 	public void incrementCandyCounter()
@@ -95,17 +71,20 @@ public class Student extends Character implements Runnable
 	}
 	
 	@Override
-public boolean goToChair()
-{
-    if (m_returningToChair) {
-        return false; // L'étudiant est déjà en train de revenir à sa chaise
-    }
-    m_returningToChair = true;
-    boolean result = !super.goToChair(); // Effectuer le déplacement vers la chaise
-    m_returningToChair = false; // Réinitialiser l'état de retour
-    m_touched = false;
-    return result;
-}
+	public boolean goToChair()
+	{
+		if(m_returningToChair)
+		{
+			return false; // Student is already going back to his chair.
+		}
+
+		m_returningToChair = true;
+		boolean result = !super.goToChair(); // Move to the chair.
+		m_returningToChair = false; // Reset return status.
+		m_touched = false;
+		
+		return result;
+	}
 
 	
 	public Candy findNearestCandy()
@@ -168,7 +147,7 @@ public boolean goToChair()
 		
 		if(goToNearestCandy() && candyIsAtOneCaseOrLess())
 		{
-			++m_candyCounter;
+			incrementCandyCounter();
 			
 			return true;
 		}
