@@ -90,12 +90,13 @@ public class Common
 			else
 			{
 				File dir = new File("src/main/resources/" + subdirPath);
+
 				if(!dir.exists() || !dir.isDirectory())
 				{
-					System.out.println("Le répertoire spécifié n'existe pas.");
+					System.out.println("The specified directory does not exist.");
 					return -1;
 				}
-
+				
 				String[] files = dir.list((d, name) -> new File(d, name).isFile());
 				return (files != null) ? files.length : 0;
 			}

@@ -9,7 +9,6 @@ import MainPack.Game;
 import GraphicsPack.Classroom;
 
 import java.awt.Graphics;
-//import java.awt.Image;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
@@ -22,7 +21,6 @@ import java.util.HashMap;
 import java.util.Comparator;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -39,8 +37,6 @@ public abstract class Character
 	protected Chair m_chair;
 	protected int m_moveSleepDuration;
 	static private Map<Character, Pair<Tile, int[]>> m_positions = new HashMap<>();
-	static private final ReentrantLock m_lockMoveAlongPath = new ReentrantLock();
-	//protected Tile m_currentTile;
 	
 	public Character(String spriteSheet, Chair chair, int i, int j)
 	{
@@ -72,8 +68,6 @@ public abstract class Character
 	{
 		return m_chair;
 	}
-	
-	//public abstract Pair<Tile, int[]> getCurrentPosition();
 	
 	public Pair<Tile, int[]> getCurrentPosition()
 	{
@@ -112,11 +106,6 @@ public abstract class Character
 	
 	public boolean move(Pair<Tile, int[]> currentTile, Pair<Tile, int[]> targetTile)
 	{
-		/*if(this instanceof Mistress)
-		{
-			System.out.println("A*");
-			System.out.println(getCurrentPosition().getValue()[0] + " " + getCurrentPosition().getValue()[1]);
-		}*/
 		boolean objectifReached = false;
 		
 		Game game = Game.getInstance();
@@ -124,10 +113,7 @@ public abstract class Character
 		ArrayList<ArrayList<Tile>> arrayTiles = classroom.getTiles();
 		ArrayList<ArrayList<Character>> charInClass = classroom.getCharacters();
 		
-		//Tile currentT = currentTile.getKey();
 		int[] currentPosition = currentTile.getValue();
-		
-		//Tile targetT = targetTile.getKey();
 		int[] targetPosition = targetTile.getValue();
 		
 		List<Node> openList = new ArrayList<>();
@@ -144,7 +130,6 @@ public abstract class Character
 				return false;
 			}
 
-			//System.out.println("While loop");
 			Node currentNode = openList.stream()
 						   .min(Comparator.comparingInt(node -> node.getFCost()))
 						   .orElseThrow(() -> new NoSuchElementException("Aucun noeud trouvé dans la liste ouverte"));
@@ -169,12 +154,12 @@ public abstract class Character
 					continue;
 				}
 				
-				int tentativeGCost = currentNode.getGCost() + 1;  // Supposons que le coût pour chaque mouvement est de 1
+				int tentativeGCost = currentNode.getGCost() + 1;  // Assume that the cost of each movement is 1.
 				
-				// Si ce nœud est dans la liste ouverte mais avec un coût plus élevé, on ignore ce voisin
+				// If this node is in the open list but with a higher cost, we ignore this neighbor.
 				if(!openList.contains(neighbor) || tentativeGCost < neighbor.getGCost())
 				{
-					cameFrom.put(neighbor, currentNode);  // Enregistrer le parent du voisin
+					cameFrom.put(neighbor, currentNode);  // Register neighbor's parent.
 					neighbor.setGCost(tentativeGCost);
 					neighbor.setFCost(neighbor.getGCost() + neighbor.getHCost());
 					
@@ -232,36 +217,7 @@ public abstract class Character
 		int dx = Math.abs(currentPosition[0] - targetPosition[0]);
 		int dy = Math.abs(currentPosition[1] - targetPosition[1]);
 		return dx + dy + (int)(0.1 * Math.max(dx, dy));
-		//return Math.abs(currentPosition[0] - targetPosition[0]) + Math.abs(currentPosition[1] - targetPosition[1]);
 	}
-	/*private int calculateHCost(int[] currentPosition, int[] targetPosition) {
-    int dx = Math.abs(currentPosition[0] - targetPosition[0]);
-    int dy = Math.abs(currentPosition[1] - targetPosition[1]);
-    
-    // Ajouter un coût si une tuile directement adjacente est un obstacle
-    int penalty = 0;
-    if (isObstacleAhead(currentPosition, targetPosition)) {
-        penalty = 10; // Pénalité pour encourager les détours
-    }
-
-    return dx + dy + penalty;
-}
-
-private boolean isObstacleAhead(int[] currentPosition, int[] targetPosition) {
-    // Détection d'un obstacle dans la direction du mouvement
-    int dx = Integer.compare(targetPosition[0], currentPosition[0]);
-    int dy = Integer.compare(targetPosition[1], currentPosition[1]);
-
-    int nextX = currentPosition[0] + dx;
-    int nextY = currentPosition[1] + dy;
-
-    Game game = Game.getInstance();
-    Classroom classroom = game.getClassroom();
-    ArrayList<ArrayList<Tile>> map = classroom.getTiles();
-    ArrayList<ArrayList<Character>> charInClass = classroom.getCharacters();
-
-    return isInBounds(nextX, nextY, map) && isObstacle(map, charInClass, nextX, nextY, this);
-}*/
 	
 	private List<Node> reconstructPath(Map<Node, Node> cameFrom, Node currentNode)
 	{
@@ -291,51 +247,41 @@ private boolean isObstacleAhead(int[] currentPosition, int[] targetPosition) {
 			{
 				return false;
 			}
-			/*m_lockMoveAlongPath.lock();
-			try
-			{*/
-				Tile tile = arrayTiles.get(node.getX()).get(node.getY());
-				
-				if(!tile.isObstacle() && charInClass.get(node.getX()).get(node.getY()) == null)
-				{
-						int oldX = currentPosition.getValue()[0];
-						int oldY = currentPosition.getValue()[1];
-						int newX = node.getX();
-						int newY = node.getY();
-						
-						Tile currentTile = currentPosition.getKey();
-						currentTile.takeTile(null);
-						charInClass.get(oldX).set(oldY, null);
-						
-						currentPosition.setValue(new int[]{node.getX(), node.getY()});
-						tile.takeTile(this);
-						//charInClass.get(newX).set(newY, this);
-						//System.out.println("[" + getCurrentPosition().getValue()[0] + "[" + getCurrentPosition().getValue()[1]);
-						
-						classroom.charPosChanged(/*charInClass*/this, oldX, oldY, newX, newY);
-						updatePosition(this, tile, new int[]{newX, newY});
-						classroom.repaint();
-					
-					try
-					{
-						TimeUnit.MILLISECONDS.sleep(m_moveSleepDuration);
-					}
-					catch(InterruptedException err)
-					{
-						Thread.currentThread().interrupt();
-					}
-					
-					
-					if(node.getX() == path.get(path.size() - 1).getX() && node.getY() == path.get(path.size() - 1).getY())
-					{
-						return true;
-					}
-				}
-			/* }
-			finally
+
+			Tile tile = arrayTiles.get(node.getX()).get(node.getY());
+			
+			if(!tile.isObstacle() && charInClass.get(node.getX()).get(node.getY()) == null)
 			{
-				m_lockMoveAlongPath.unlock();
-			}*/
+					int oldX = currentPosition.getValue()[0];
+					int oldY = currentPosition.getValue()[1];
+					int newX = node.getX();
+					int newY = node.getY();
+					
+					Tile currentTile = currentPosition.getKey();
+					currentTile.takeTile(null);
+					charInClass.get(oldX).set(oldY, null);
+					
+					currentPosition.setValue(new int[]{node.getX(), node.getY()});
+					tile.takeTile(this);
+					
+					classroom.charPosChanged(this, oldX, oldY, newX, newY);
+					updatePosition(this, tile, new int[]{newX, newY});
+					classroom.repaint();
+				
+				try
+				{
+					TimeUnit.MILLISECONDS.sleep(m_moveSleepDuration);
+				}
+				catch(InterruptedException err)
+				{
+					Thread.currentThread().interrupt();
+				}
+				
+				if(node.getX() == path.get(path.size() - 1).getX() && node.getY() == path.get(path.size() - 1).getY())
+				{
+					return true;
+				}
+			}
 		}
 		
 		return false;
@@ -355,7 +301,7 @@ private boolean isObstacleAhead(int[] currentPosition, int[] targetPosition) {
 	{
 		List<Node> neighbors = new ArrayList<>();
 		
-		// Déplacements possibles (haut, bas, gauche, droite)
+		// Possible positions (up, down, left, right).
 		int[] dx = {-1, 1, 0, 0};
 		int[] dy = {0, 0, -1, 1};
 		
@@ -364,7 +310,7 @@ private boolean isObstacleAhead(int[] currentPosition, int[] targetPosition) {
 			int newX = node.getX() + dx[i];
 			int newY = node.getY() + dy[i];
 			
-			if (isInBounds(newX, newY, map) && !isObstacle(map, charInClass, newX, newY, currentChar))
+			if(isInBounds(newX, newY, map) && !isObstacle(map, charInClass, newX, newY, currentChar))
 			{
 				int hCost = calculateHCost(new int[]{newX, newY}, targetPosition);
 				neighbors.add(new Node(newX, newY, node, node.getGCost() + 1, hCost));
@@ -409,8 +355,6 @@ private boolean isObstacleAhead(int[] currentPosition, int[] targetPosition) {
 	
 	static private void updatePosition(Character character, Tile tile, int[] position)
 	{
-		//System.out.println("Position updated to [" + position[0] + ", " + position[1]);
 		m_positions.put(character, new Pair<>(tile, position));
-		//System.out.println("Position updated in map to [" + m_positions.get(character).getValue()[0] + ", " + m_positions.get(character).getValue()[1]);
 	}
 }

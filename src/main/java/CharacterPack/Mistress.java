@@ -36,7 +36,7 @@ public class Mistress extends Character implements Runnable
 		{
 			Pair<Tile, int[]> currentPosition = getCurrentPosition();
 
-			// Possible positions (up, down, left, right)
+			// Possible positions (up, down, left, right).
 			int[] dx = {-1, 1, 0, 0};
 			int[] dy = {0, 0, -1, 1};
 
