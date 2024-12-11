@@ -5,6 +5,7 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.Random;
+import java.io.File;
 import java.io.IOException;
 
 public class Common
@@ -53,30 +54,51 @@ public class Common
 		Random r = new Random();
 		return r.nextInt((max - min) + 1) + min;
 	}
+
+	static public boolean isJar()
+	{
+		String path = Common.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        return path.endsWith(".jar");
+	}
 	
 	static public int countFilesInResourcesSubdirectory(String subdirPath)
 	{
 		try
 		{
-			String jarPath = Common.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-			JarFile jarFile = new JarFile(jarPath);
-			Enumeration<JarEntry> entries = jarFile.entries();
-			
-			int fileCount = 0;
-			
-			while(entries.hasMoreElements())
+			if(isJar())
 			{
-				JarEntry entry = entries.nextElement();
+				String jarPath = Common.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+				JarFile jarFile = new JarFile(jarPath);
+				Enumeration<JarEntry> entries = jarFile.entries();
 				
-				if(entry.getName().startsWith(subdirPath) && !entry.isDirectory())
+				int fileCount = 0;
+				
+				while(entries.hasMoreElements())
 				{
-					++fileCount;
+					JarEntry entry = entries.nextElement();
+					
+					if(entry.getName().startsWith(subdirPath) && !entry.isDirectory())
+					{
+						++fileCount;
+					}
 				}
+				
+				jarFile.close();
+				
+				return fileCount;
 			}
-			
-			jarFile.close();
-			
-			return fileCount;
+			else
+			{
+				File dir = new File("src/main/resources/" + subdirPath);
+				if(!dir.exists() || !dir.isDirectory())
+				{
+					System.out.println("Le répertoire spécifié n'existe pas.");
+					return -1;
+				}
+
+				String[] files = dir.list((d, name) -> new File(d, name).isFile());
+				return (files != null) ? files.length : 0;
+			}
 		}
 		catch(IOException err)
 		{

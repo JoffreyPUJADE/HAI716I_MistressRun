@@ -210,13 +210,29 @@ public class Classroom extends JPanel
 		
 		return arrayRes;
 	}
-	
-	public synchronized void charPosChanged(/*ArrayList<ArrayList<Character>> charInClass, */ Character character, int oldX, int oldY, int newX, int newY)
+
+	public int getStudentsCount()
 	{
-		/*boolean isStudent = (m_students.get(oldX).get(oldY) != null);// && m_students.get(oldX).get(oldY) instanceof Student;
-		boolean isMistress = (m_mistresses.get(oldX).get(oldY) != null);*/
-		
+		int studentsCounter = 0;
+
+		for(int i=0;i<m_students.size();++i)
+		{
+			for(int j=0;j<m_students.get(i).size();++j)
+			{
+				if(m_students.get(i).get(j) != null)
+				{
+					++studentsCounter;
+				}
+			}
+		}
+
+		return studentsCounter;
+	}
+	
+	public synchronized void charPosChanged(Character character, int oldX, int oldY, int newX, int newY)
+	{
 		m_lockUpdatePosition.lock();
+
 		try
 		{
 			Student student = character instanceof Student ? (Student)character : null;
@@ -244,8 +260,8 @@ public class Classroom extends JPanel
 		Student student = null;
 		Mistress mistress = null;
 		
-		int c = 0;
-		int d = 0;
+		/*int c = 0;
+		int d = 0;*/
 		
 		for(int i=0;i<m_students.size();++i)
 		{
@@ -254,8 +270,8 @@ public class Classroom extends JPanel
 				if(m_students.get(i).get(j) != null)
 				{
 					student = m_students.get(i).get(j);
-					c = i;
-					d = j;
+					/*c = i;
+					d = j;*/
 					
 					System.out.println(i + " " + j);
 					
@@ -393,63 +409,66 @@ public class Classroom extends JPanel
 		
 		try
 		{
-		super.paintComponent(g);
-		 Graphics2D g2d = (Graphics2D) g;
-    g2d.setColor(Color.WHITE); // Fond blanc
-    g2d.fillRect(0, 0, getWidth(), getHeight()); // Efface le dessin précédent
-		
-		// Dessin classe.
-		for(int i=0;i<m_classroom.size();++i)
-		{
-			for(int j=0;j<m_classroom.get(i).size();++j)
+			super.paintComponent(g);
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setColor(Color.WHITE); // White background.
+			g2d.fillRect(0, 0, getWidth(), getHeight()); // Deletes the previous drawing.
+			
+			// Classroom drawing.
+			for(int i=0;i<m_classroom.size();++i)
 			{
-				String currentSprite = m_classroom.get(i).get(j).getSprite();
-				InputStream is = Common.getStreamFromResource(currentSprite);
-				
-				try
+				for(int j=0;j<m_classroom.get(i).size();++j)
 				{
-					BufferedImage image = ImageIO.read(is);
+					String currentSprite = m_classroom.get(i).get(j).getSprite();
+					InputStream is = Common.getStreamFromResource(currentSprite);
 					
-					g.drawImage(image, j * m_tileSize, i * m_tileSize, m_tileSize, m_tileSize, this);
+					try
+					{
+						BufferedImage image = ImageIO.read(is);
+						
+						g.drawImage(image, j * m_tileSize, i * m_tileSize, m_tileSize, m_tileSize, this);
+					}
+					catch(IOException err)
+					{
+						err.printStackTrace();
+					}
 				}
-				catch(IOException err)
+			}
+			
+			// Students drawing.
+			for(int i=0;i<m_students.size();++i)
+			{
+				for(int j=0;j<m_students.get(i).size();++j)
 				{
-					err.printStackTrace();
+					if(m_students.get(i).get(j) != null)
+					{
+						int xStudent = j * 48;
+						int yStudent = i * 48;
+						
+						m_students.get(i).get(j).draw(g, xStudent, yStudent);
+					}
+				}
+			}
+			
+			// Drawing mistresses.
+			for(int i=0;i<m_mistresses.size();++i)
+			{
+				for(int j=0;j<m_mistresses.get(i).size();++j)
+				{
+					if(m_mistresses.get(i).get(j) != null)
+					{
+						int xMistress = j * 48;
+						int yMistress = i * 48;
+						
+						m_mistresses.get(i).get(j).draw(g, xMistress, yMistress);
+					}
 				}
 			}
 		}
-		
-		// Dessin élèves.
-		for(int i=0;i<m_students.size();++i)
+		finally
 		{
-			for(int j=0;j<m_students.get(i).size();++j)
-			{
-				if(m_students.get(i).get(j) != null)
-				{
-					int xStudent = j * 48;
-					int yStudent = i * 48;
-					
-					m_students.get(i).get(j).draw(g, xStudent, yStudent);
-				}
-			}
+			m_lockRepaint.unlock();
 		}
-		
-		// Dessin maîtresses.
-		for(int i=0;i<m_mistresses.size();++i)
-		{
-			for(int j=0;j<m_mistresses.get(i).size();++j)
-			{
-				if(m_mistresses.get(i).get(j) != null)
-				{
-					int xMistress = j * 48;
-					int yMistress = i * 48;
-					
-					m_mistresses.get(i).get(j).draw(g, xMistress, yMistress);
-				}
-			}
-		}
-		}
-		finally{m_lockRepaint.unlock();}
 	}
 	
 	private boolean verifyOrientation(String type, String orientation)

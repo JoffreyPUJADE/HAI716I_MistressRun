@@ -89,22 +89,13 @@ public class AStarMoveStrategy {
                 int newX = node.getX() + dx[i];
                 int newY = node.getY() + dy[i];
     
-                if (isInBounds(newX, newY, tiles) && !isObstacle(tiles, characters, newX, newY)) {
-                    int hCost = calculateHCost(new int[]{newX, newY}, targetPosition);
-                    neighbors.add(new Node(newX, newY, node, node.getGCost() + 1, hCost));
-                }
+            
+                int hCost = calculateHCost(new int[]{newX, newY}, targetPosition);
+                neighbors.add(new Node(newX, newY, node, node.getGCost() + 1, hCost));
+                
             }
     
             return neighbors;
-        }
-        
-        private static boolean isObstacle(ArrayList<ArrayList<Tile>> map, ArrayList<ArrayList<Character>> charInClass,
-                                          int x, int y) {
-            return map.get(x).get(y).isObstacle() || charInClass.get(x).get(y) != null;
-        }
-    
-        private static boolean isInBounds(int x, int y, ArrayList<ArrayList<Tile>> map) {
-            return x >= 0 && x < map.size() && y >= 0 && y < map.get(x).size();
         }
     
         private static int calculateHCost(int[] currentPosition, int[] targetPosition) {
