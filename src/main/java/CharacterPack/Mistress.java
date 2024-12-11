@@ -1,12 +1,12 @@
 package CharacterPack;
 
-import TilePack.TeacherChair;
-import TilePack.Tile;
-import MainPack.Game;
+import java.util.ArrayList;
+
 import AlgoPack.Pair;
 import GraphicsPack.Classroom;
-
-import java.util.ArrayList;
+import MainPack.Game;
+import TilePack.TeacherChair;
+import TilePack.Tile;
 
 public class Mistress extends Character implements Runnable
 {
