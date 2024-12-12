@@ -291,11 +291,10 @@ public class Classroom extends JPanel
 			}
 		}
 		
-		//student.move(new Pair<Tile, int[]>((Tile)student.getChair(), new int[]{c, d}), new Pair<Tile, int[]>(m_classroom.get(a).get(b), new int[]{a, b}));
 		student.tryToGoAtCandy();
 		System.out.println(student.getCurrentPosition().getValue()[0] + ", " + student.getCurrentPosition().getValue()[1]);
 		mistress.followStudent();
-		//student.goToChair();
+
 	}
 	
 	public void moveAllStudentToCandy()

@@ -1,9 +1,9 @@
 package TilePack;
 
+import java.io.InputStream;
+
 import AlgoPack.Common;
 import CharacterPack.Character;
-
-import java.io.InputStream;
 
 public abstract class Tile
 {

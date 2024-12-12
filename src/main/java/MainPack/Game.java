@@ -1,10 +1,10 @@
 package MainPack;
 
-import GraphicsPack.Classroom;
-import GraphicsPack.Window;
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
+
+import GraphicsPack.Classroom;
+import GraphicsPack.Window;
 
 public class Game
 {
@@ -38,10 +38,7 @@ public class Game
 	
 	public void move()
 	{
-		//m_classroom.moveFirstStudent(0, 14);
 		m_classroom.moveAllStudentToCandy();
-		//m_classroom.moveMistress();
-		//m_classroom.moveMistressToFirstStudent();
 	}
 	
 	public static Game getInstance()

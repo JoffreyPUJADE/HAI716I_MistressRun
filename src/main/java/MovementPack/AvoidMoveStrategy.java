@@ -16,7 +16,7 @@ import CharacterPack.Character;
 import TilePack.Chair;
 import TilePack.Tile;
 
-public class AStarMoveStrategy extends Character {
+public class AvoidMoveStrategy extends Character {
     
     public static List<Node> findPath(Pair<Tile, int[]> start, Pair<Tile, int[]> goal,
                                       ArrayList<ArrayList<Tile>> tiles,
@@ -78,7 +78,8 @@ public class AStarMoveStrategy extends Character {
         Collections.reverse(path);
 
         return path;
-    } 
+    }
+ //Etre le plus loin en le voyant comme obstacle 
         private static List<Node> getNeighbors(Node node, ArrayList<ArrayList<Tile>> tiles,
             ArrayList<ArrayList<Character>> characters, int[] targetPosition, int index) {
         List<Node> neighbors = new ArrayList<>();
@@ -109,7 +110,7 @@ public class AStarMoveStrategy extends Character {
         return Math.max(dx, dy);
     }
 
-    public AStarMoveStrategy(String spriteSheet, Chair chair, int i, int j, int index) {
+    public AvoidMoveStrategy(String spriteSheet, Chair chair, int i, int j, int index) {
         super(spriteSheet, chair, i, j);
     }
 
@@ -124,8 +125,8 @@ public class AStarMoveStrategy extends Character {
         throw new UnsupportedOperationException("Unimplemented method 'isEscaping'");
     }
 
-
-        public static boolean isInBounds(int x, int y, ArrayList<ArrayList<Tile>> map) {
+    
+    public static boolean isInBounds(int x, int y, ArrayList<ArrayList<Tile>> map) {
             return x >= 0 && x < map.size() && y >= 0 && y < map.get(x).size();
         }
 }

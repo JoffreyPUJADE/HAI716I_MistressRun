@@ -11,6 +11,7 @@ import TilePack.Tile;
 
 public class Mistress extends Character implements Runnable
 {
+	private boolean m_returningToChair;
 	private int m_touchedStudents;
 	private final ReentrantLock m_lock = new ReentrantLock();
 	
@@ -35,8 +36,7 @@ public class Mistress extends Character implements Runnable
 		try
 		{
 			Pair<Tile, int[]> currentPosition = getCurrentPosition();
-
-			// Possible positions (up, down, left, right).
+		
 			int[] dx = {-1, 1, 0, 0};
 			int[] dy = {0, 0, -1, 1};
 
@@ -49,7 +49,7 @@ public class Mistress extends Character implements Runnable
 				{
 					Student student = arrayStudents.get(newX).get(newY);
 
-					// Check that the student hasn't already been hit.
+
 					if(!student.isTouched())
 					{
 						studentsAround.add(student);
@@ -96,64 +96,71 @@ public class Mistress extends Character implements Runnable
 	}
 
 	@Override
-	public boolean isTouched() // A teacher cannot be touched.
+	public boolean isTouched() 
 	{
 		return false;
 	}
 
 	@Override
-	public boolean isEscaping() // A teacher cannot be "escaping".
+	public boolean isEscaping()
 	{
 		return false;
 	}
 
-	public void followStudent()
-	{
+	public void followStudent() {
 		Game game = Game.getInstance();
 		Classroom classroom = game.getClassroom();
 		ArrayList<ArrayList<Tile>> arrayTiles = classroom.getTiles();
 		ArrayList<ArrayList<Student>> students = classroom.getStudents();
 		ArrayList<Student> escapingStudents = getEscapingStudents(students);
-		
-		for(Student escapingStudent : escapingStudents)
-		{
-			// Moving towards the escaping student.
+		if (escapingStudents.isEmpty()) {
+			goToChair();
+		}
+	
+		for (Student escapingStudent : escapingStudents) {
+
+			if (escapingStudent == null) {
+				continue; 
+			}
+	
 			move(getCurrentPosition(), escapingStudent.getCurrentPosition());
-
-			// Checking nearby students.
+	
 			ArrayList<Student> nearbyStudents = getStudentsAround(students, arrayTiles);
+                        
 			boolean touchedNearby = false;
-
-			for(Student nearbyStudent : nearbyStudents)
-			{
-				if(nearbyStudent.isEscaping() && !nearbyStudent.isTouched())
-				{
+	
+			for (Student nearbyStudent : nearbyStudents) {
+				if (nearbyStudent.isEscaping() && !nearbyStudent.isTouched()) {
 					nearbyStudent.touched();
 					touchedNearby = true;
-					break; // We stop as soon as we touch a student.
+					break; 
 				}
 			}
 
-			if(!touchedNearby)
-			{
-				System.out.println("really no way");
-			}
 		}
 	}
+	
 	
 	@Override
 	public String toString()
 	{
 		return String.format("%s ; TouchedStudents : %d", super.toString(), m_touchedStudents);
 	}
-
-	public void run()
-	{
-		while(true)
+	public boolean goToChair()
 		{
-			followStudent();
+			
+			boolean result = !super.goToChair(); 
+			m_returningToChair = false; 
+			return result;
 		}
-	}
+
+		public void run()
+		{
+			while (true) { 
+				followStudent();
+			}
+				
+		}
 
 	@Override
 		public boolean isObstacle(ArrayList<ArrayList<Tile>> map, ArrayList<ArrayList<Character>> charInClass, int x, int y)

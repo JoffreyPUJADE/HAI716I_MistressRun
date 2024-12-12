@@ -28,29 +28,11 @@ public class Student extends Character implements Runnable
 	public int getCandyCounter()
 	{
 		return m_candyCounter;
+		
+		
 	}
 	
-	/*@Override
-	public Pair<Tile, int[]> getCurrentPosition()
-	{
-		Game game = Game.getInstance();
-		Classroom classroom = game.getClassroom();
-		ArrayList<ArrayList<Tile>> arrayTiles = classroom.getTiles();
-		ArrayList<ArrayList<Student>> arrayStudents = classroom.getStudents();
-		
-		for(int i=0;i<arrayStudents.size();++i)
-		{
-			for(int j=0;j<arrayStudents.get(i).size();++j)
-			{
-				if(arrayStudents.get(i).get(j) == this)
-				{
-					return new Pair<Tile, int[]>(arrayTiles.get(i).get(j), new int[]{i, j});
-				}
-			}
-		}
-		
-		return new Pair<>(null, new int[]{-1, -1});
-	}*/
+	
 	
 	public void setCandyCounter(int candyCounter)
 	{
@@ -72,14 +54,9 @@ public class Student extends Character implements Runnable
 	public boolean touched()
 {
     if (m_touched) {
-        return false; // L'étudiant est déjà touché et retourné à sa chaise
+        return false; 
     }
     m_touched = true;
-    /*boolean success = goToChair();
-    if (success) {
-        m_touched = false; // Réinitialiser l'état une fois l'étudiant retourné à sa chaise
-    }
-    return success;*/
 	return true;
 }
 
@@ -97,12 +74,13 @@ public class Student extends Character implements Runnable
 	@Override
 public boolean goToChair()
 {
+	System.err.println(super.getIndex()+" "+m_candyCounter);
     if (m_returningToChair) {
-        return false; // L'étudiant est déjà en train de revenir à sa chaise
+        return false; 
     }
     m_returningToChair = true;
-    boolean result = !super.goToChair(); // Effectuer le déplacement vers la chaise
-    m_returningToChair = false; // Réinitialiser l'état de retour
+    boolean result = !super.goToChair(); 
+    m_returningToChair = false; 
     m_touched = false;
     return result;
 }
@@ -164,7 +142,7 @@ public boolean goToChair()
 	
 	public boolean tryToGoAtCandy()
 	{
-		// Potentially, where the students' strategy(ies) will be implemented.
+
 		
 		if(goToNearestCandy() && candyIsAtOneCaseOrLess())
 		{
@@ -183,8 +161,39 @@ public boolean goToChair()
 	}
 	
 	public void run()
-	{
-		tryToGoAtCandy();
-		goToChair();
+	{ 
+		while (true) {
+
+			if (!getMistresses()){
+			tryToGoAtCandy();
+			goToChair();}
+			if (getMistresses() && super.getIndex()==2){// démarre quand maîtresse, vas a la chaise 
+				tryToGoAtCandy();
+				goToChair();
+			}
+	
+			try {
+				switch (super.getIndex()) {
+					case 1 :
+						Thread.sleep(3000);
+						break;
+					case 2: 
+						Thread.sleep(500);
+						break;
+					case 3: 
+						Thread.sleep(1000);
+						break;
+					case 4: 
+						Thread.sleep(1000);
+						break;
+				}
+					
+
+				
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				break;
+			}
+		}
 	}
 }

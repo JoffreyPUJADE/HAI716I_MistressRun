@@ -16,7 +16,7 @@ import CharacterPack.Character;
 import TilePack.Chair;
 import TilePack.Tile;
 
-public class AStarMoveStrategy extends Character {
+public class Longestpath extends Character {
     
     public static List<Node> findPath(Pair<Tile, int[]> start, Pair<Tile, int[]> goal,
                                       ArrayList<ArrayList<Tile>> tiles,
@@ -33,7 +33,7 @@ public class AStarMoveStrategy extends Character {
 
         while (!openList.isEmpty()) {
             Node currentNode = openList.stream()
-                                       .min(Comparator.comparingInt(Node::getFCost))
+                                       .max(Comparator.comparingInt(Node::getFCost))
                                        .orElseThrow(NoSuchElementException::new);
 
             openList.remove(currentNode);
@@ -78,13 +78,12 @@ public class AStarMoveStrategy extends Character {
         Collections.reverse(path);
 
         return path;
-    } 
+    }
         private static List<Node> getNeighbors(Node node, ArrayList<ArrayList<Tile>> tiles,
             ArrayList<ArrayList<Character>> characters, int[] targetPosition, int index) {
         List<Node> neighbors = new ArrayList<>();
         int[] dx = {-1, 1, 0, 0, -1, 1, -1, 1};  
         int[] dy = {0, 0, -1, 1, -1, -1, 1, 1};
-
 
         
         for (int i = 0; i < 8; i++) {
@@ -109,7 +108,7 @@ public class AStarMoveStrategy extends Character {
         return Math.max(dx, dy);
     }
 
-    public AStarMoveStrategy(String spriteSheet, Chair chair, int i, int j, int index) {
+    public Longestpath(String spriteSheet, Chair chair, int i, int j, int index) {
         super(spriteSheet, chair, i, j);
     }
 

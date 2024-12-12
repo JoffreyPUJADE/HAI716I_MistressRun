@@ -27,12 +27,12 @@
 		],
 		[
 			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-			{ "type": "desk" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "desk" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "desk" , "orientation": "null"},
+			{ "type": "desk" , "orientation": "null"}, { "type": "desk" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "desk" , "orientation": "null"},{ "type": "desk" , "orientation": "null"},
 			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
 		],
 		[
 			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"},
-			{ "type": "studentChair" , "orientation": "back"}, { "type": "floor" , "orientation": "null"}, { "type": "studentChair" , "orientation": "back"}, { "type": "floor" , "orientation": "null"}, { "type": "studentChair" , "orientation": "back"},
+			{ "type": "studentChair" , "orientation": "back"}, { "type": "studentChair" , "orientation": "back"}, { "type": "floor" , "orientation": "null"}, { "type": "studentChair" , "orientation": "back"}, { "type": "studentChair" , "orientation": "back"},
 			{ "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}, { "type": "floor" , "orientation": "null"}
 		],
 		[
