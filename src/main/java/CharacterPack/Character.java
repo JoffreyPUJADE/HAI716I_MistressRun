@@ -8,6 +8,7 @@ import TilePack.Tile;
 import MainPack.Game;
 import MovementPack.AStarMoveStrategy;
 import GraphicsPack.Classroom;
+import GraphicsPack.CharacterInfo;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;

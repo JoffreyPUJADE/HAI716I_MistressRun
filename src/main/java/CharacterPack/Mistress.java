@@ -5,6 +5,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import AlgoPack.Pair;
 import GraphicsPack.Classroom;
+import GraphicsPack.MistressInfo;
 import MainPack.Game;
 import TilePack.TeacherChair;
 import TilePack.Tile;
@@ -146,6 +147,7 @@ public class Mistress extends Character implements Runnable
 				{
 					nearbyStudent.touched();
 					touchedNearby = true;
+					aStudentIsTouched();
 					break; 
 				}
 			}
@@ -173,5 +175,14 @@ public class Mistress extends Character implements Runnable
 	public boolean isObstacle(ArrayList<ArrayList<Tile>> map, ArrayList<ArrayList<Character>> charInClass, int x, int y)
 	{
 		return map.get(x).get(y).isObstacle();
+	}
+
+	private void aStudentIsTouched()
+	{
+		++m_touchedStudents;
+
+		MistressInfo mi = (MistressInfo)Game.getInstance().getCharInfo(this);
+		System.out.println(m_touchedStudents);
+		mi.updateTouchedStudents(m_touchedStudents);
 	}
 }

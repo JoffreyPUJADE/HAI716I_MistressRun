@@ -7,6 +7,7 @@ import MainPack.Game;
 import AlgoPack.Common;
 import AlgoPack.Pair;
 import GraphicsPack.Classroom;
+import GraphicsPack.StudentInfo;
 
 import java.util.ArrayList;
 
@@ -62,11 +63,13 @@ public class Student extends Character implements Runnable
 	public void incrementCandyCounter()
 	{
 		++m_candyCounter;
+		updateGraphicalCandyCount();
 	}
 	
 	public void decrementCandyCounter()
 	{
 		--m_candyCounter;
+		updateGraphicalCandyCount();
 	}
 	
 	@Override
@@ -146,7 +149,7 @@ public class Student extends Character implements Runnable
 	{
 		if(goToNearestCandy() && candyIsAtOneCaseOrLess())
 		{
-			++m_candyCounter;
+			incrementCandyCounter();
 			
 			return true;
 		}
@@ -204,5 +207,11 @@ public class Student extends Character implements Runnable
 				break;
 			}
 		}
+	}
+
+	private void updateGraphicalCandyCount()
+	{
+		StudentInfo si = (StudentInfo)Game.getInstance().getCharInfo(this);
+		si.updateCandyCounter(m_candyCounter);
 	}
 }
