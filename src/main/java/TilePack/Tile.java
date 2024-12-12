@@ -46,4 +46,9 @@ public abstract class Tile
 	{
 		return String.format("%s => Sprite : %s ; IsObstacle : %b ; OccupiedBy : %s", this.getClass().getSimpleName(), m_sprite, m_isObstacle, m_occupiedBy == null ? "null" : "someone");
 	}
+
+	protected void setSprite(String sprite)
+	{
+		m_sprite = sprite;
+	}
 }

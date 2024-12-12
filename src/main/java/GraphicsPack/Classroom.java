@@ -11,6 +11,8 @@ import TilePack.NeedBackground;
 import TilePack.Board;
 import TilePack.Desk;
 import TilePack.Candy;
+import TilePack.Computer;
+import TilePack.BookStack;
 import TilePack.StudentChair;
 import TilePack.TeacherChair;
 import CharacterPack.Character;
@@ -96,6 +98,18 @@ public class Classroom extends JPanel
 					
 					case "candy":
 						m_classroom.get(i).add(new Candy(Common.randint(1, Common.countFilesInResourcesSubdirectory("candies"))));
+						m_students.get(i).add(null);
+						m_mistresses.get(i).add(null);
+					break;
+
+					case "computer":
+						m_classroom.get(i).add(new Computer(orientation));
+						m_students.get(i).add(null);
+						m_mistresses.get(i).add(null);
+					break;
+
+					case "bookStack":
+						m_classroom.get(i).add(new BookStack());
 						m_students.get(i).add(null);
 						m_mistresses.get(i).add(null);
 					break;
