@@ -45,6 +45,10 @@
 						<source>
 							${basedir}/src/main/java/CharacterPack
 						</source>
+
+						<source>
+							${basedir}/src/main/java/MovementPack
+						</source>
 					</sources>
 					
 					<archive>
@@ -96,6 +100,10 @@
 								
 								<source>
 									${basedir}/src/main/java/CharacterPack
+								</source>
+
+								<source>
+									${basedir}/src/main/java/MovementPack
 								</source>
 							</sources>
 							
