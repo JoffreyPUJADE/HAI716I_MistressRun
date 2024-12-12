@@ -8,7 +8,6 @@ import TilePack.Tile;
 import MainPack.Game;
 import MovementPack.AStarMoveStrategy;
 import GraphicsPack.Classroom;
-import GraphicsPack.CharacterInfo;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -26,7 +25,6 @@ import java.io.IOException;
 import MovementPack.AstarForMistress;
 import MovementPack.AvoidMoveStrategy;
 import MovementPack.Longestpath;
-import java.util.Random;
 
 
 public abstract class Character
@@ -145,7 +143,6 @@ public abstract class Character
         ArrayList<ArrayList<Tile>> arrayTiles = classroom.getTiles();
         ArrayList<ArrayList<Character>> charInClass = classroom.getCharacters();
 		List<Node> path = new ArrayList<>();
-		Random random = new Random();
 				
 		switch(m_index)
         {
