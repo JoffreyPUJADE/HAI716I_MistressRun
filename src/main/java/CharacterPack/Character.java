@@ -98,6 +98,30 @@ public abstract class Character
         return m_positions.get(this);
     }
 
+    public String getStrategyString()
+    {
+        switch(m_index)
+        {
+			case 0:
+				return AstarForMistress.getStrategyName();
+            
+			case 1:
+				return AvoidMoveStrategy.getStrategyName();
+            
+			case 2:
+                return Longestpath.getStrategyName();
+            
+			case 3:
+                return AStarMoveStrategy.getStrategyName();
+            
+			case 4:
+                return AStarMoveStrategy.getStrategyName();
+            
+            default:
+                return null;
+		}
+    }
+
     public void setDirection(String direction)
     {
         m_direction = direction;

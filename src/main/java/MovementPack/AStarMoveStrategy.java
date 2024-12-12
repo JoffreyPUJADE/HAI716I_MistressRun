@@ -18,6 +18,11 @@ import TilePack.Tile;
 
 public class AStarMoveStrategy extends Character
 {
+    public static String getStrategyName()
+    {
+        return AStarMoveStrategy.class.getSimpleName();
+    }
+    
     public static List<Node> findPath(Pair<Tile, int[]> start, Pair<Tile, int[]> goal, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters, int index)
     {
         int[] startCoords = start.getValue();

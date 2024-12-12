@@ -18,6 +18,11 @@ import TilePack.Tile;
 
 public class Longestpath extends Character
 {
+    public static String getStrategyName()
+    {
+        return Longestpath.class.getSimpleName();
+    }
+    
     public static List<Node> findPath(Pair<Tile, int[]> start, Pair<Tile, int[]> goal, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters, int index)
     {
         int[] startCoords = start.getValue();

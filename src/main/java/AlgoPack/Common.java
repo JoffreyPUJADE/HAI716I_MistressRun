@@ -7,6 +7,8 @@ import java.util.jar.JarFile;
 import java.util.Random;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 
 public class Common
 {
@@ -53,6 +55,17 @@ public class Common
 		
 		Random r = new Random();
 		return r.nextInt((max - min) + 1) + min;
+	}
+
+	static public long randlong(long min, long max)
+	{
+		if(min >= max)
+		{
+			throw new IllegalArgumentException("max must be greater than min");
+		}
+		
+		Random r = new Random();
+		return r.nextLong((max - min) + 1) + min;
 	}
 
 	static public boolean isJar()
@@ -111,5 +124,40 @@ public class Common
 	static public int distanceManhattan(int x1, int y1, int x2, int y2)
 	{
 		return Math.abs(x2 - x1) + Math.abs(y2 - y1);
+	}
+
+	static public boolean createDirectoryIfNotExists(String path)
+	{
+		try
+		{
+			Files.createDirectories(Paths.get(path));
+
+			return true;
+		}
+		catch(IOException err)
+		{
+			err.printStackTrace();
+
+			return false;
+		}
+	}
+
+	static public String getRandomString(int nbChars)
+	{
+		char[] characters = new char[nbChars];
+
+		for(int i=0;i<nbChars;++i)
+		{
+			if(randint(0, 1) == 0) // Lettre
+			{
+				characters[i] = (char)(randint(0, 25) + 'a');
+			}
+			else // Chiffre
+			{
+				characters[i] = (char)(randint(0, 9) + '0');
+			}
+		}
+
+		return String.valueOf(characters);
 	}
 }

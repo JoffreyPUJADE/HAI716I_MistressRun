@@ -46,11 +46,11 @@ public class Game
 				{
 					if(chars.get(i).get(j) instanceof Mistress)
 					{
-						m_charInfos.put(chars.get(i).get(j), new MistressInfo(charsCounter * 200, (classroomHeight / 4) * 5, 200, 50, "strat", ((Mistress)chars.get(i).get(j)).getTouchedStudents()));
+						m_charInfos.put(chars.get(i).get(j), new MistressInfo(charsCounter * 200, (classroomHeight / 4) * 5, 200, 50, chars.get(i).get(j).getStrategyString(), ((Mistress)chars.get(i).get(j)).getTouchedStudents()));
 					}
 					else if(chars.get(i).get(j) instanceof Student)
 					{
-						m_charInfos.put(chars.get(i).get(j), new StudentInfo(charsCounter * 200, (classroomHeight / 4) * 5, 200, 50, "strat", ((Student)chars.get(i).get(j)).getCandyCounter()));
+						m_charInfos.put(chars.get(i).get(j), new StudentInfo(charsCounter * 200, (classroomHeight / 4) * 5, 200, 50, chars.get(i).get(j).getStrategyString(), ((Student)chars.get(i).get(j)).getCandyCounter()));
 					}
 
 					++charsCounter;
@@ -84,6 +84,23 @@ public class Game
 	public void move()
 	{
 		m_classroom.moveAllStudentToCandy();
+	}
+
+	public void launch()
+	{
+		while(!m_window.runAsked())
+		{
+			try
+			{
+				Thread.sleep(50);
+			}
+			catch(InterruptedException err)
+			{
+				err.printStackTrace();
+			}
+		}
+
+		move();
 	}
 	
 	public static Game getInstance()

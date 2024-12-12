@@ -8,6 +8,8 @@ Un projet de programmation multi-agents.
 
 * [Compilation](#compilation)
 * [Exécution](#exécution)
+    * [Lancement](#lancement)
+    * [Commandes pendant l'exécution](#commandes-pendant-lexécution)
 * [Ressources](#ressources)
 * [Sources](#sources)
 
@@ -19,11 +21,19 @@ La commande de compilation est la suivante : `mvn package`.
 
 # Exécution
 
+## Lancement
+
 Pour exécuter le projet, sous Windows, il suffit de double-cliquer sur l'archive `...-jar-with-dependencies.jar` dans le répertoire `target/` généré par la compilation.
 
 Sous Linux, la commande `java -jar [NOM_ARCHIVE]-jar-with-dependencies.jar` permet son exécution.
 
 Un fichier `launch.sh` contient la commande d'exécution du projet, afin de rendre la commande d'exécution moins verbeuse si besoin est.
+
+## Commandes pendant l'exécution
+
+Pour démarrer la simulation des agents, il suffit de taper sur la touche `R`.
+
+Pour prendre une capture d'écran pendant l'exécution du projet, il suffit de taper sur la touche `S`.
 
 # Ressources
 
