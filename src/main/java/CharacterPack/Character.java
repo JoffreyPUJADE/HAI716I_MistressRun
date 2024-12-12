@@ -71,7 +71,7 @@ public abstract class Character
 
 		if(m_index==2)
         {
-			m_moveSleepDuration = 200;
+			m_moveSleepDuration = 100;
 		}
         else
         {

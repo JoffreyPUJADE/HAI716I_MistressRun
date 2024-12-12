@@ -13,6 +13,7 @@ import TilePack.Desk;
 import TilePack.Candy;
 import TilePack.Computer;
 import TilePack.BookStack;
+import TilePack.OpenBook;
 import TilePack.StudentChair;
 import TilePack.TeacherChair;
 import CharacterPack.Character;
@@ -110,6 +111,12 @@ public class Classroom extends JPanel
 
 					case "bookStack":
 						m_classroom.get(i).add(new BookStack());
+						m_students.get(i).add(null);
+						m_mistresses.get(i).add(null);
+					break;
+
+					case "openBook":
+						m_classroom.get(i).add(new OpenBook());
 						m_students.get(i).add(null);
 						m_mistresses.get(i).add(null);
 					break;
@@ -493,7 +500,7 @@ public class Classroom extends JPanel
 	
 	private boolean verifyOrientation(String type, String orientation)
 	{
-		boolean isOriented = (type.equals("studentChair") || type.equals("teacherChair"));
+		boolean isOriented = (type.equals("studentChair") || type.equals("teacherChair") || type.equals("computer"));
 		boolean validOrientation = (orientation.equals("front") || orientation.equals("back") || orientation.equals("left") || orientation.equals("right"));
 		
 		return ((isOriented && validOrientation) || (!isOriented && orientation.equals("null")));
