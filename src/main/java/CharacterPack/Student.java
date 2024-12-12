@@ -28,11 +28,7 @@ public class Student extends Character implements Runnable
 	public int getCandyCounter()
 	{
 		return m_candyCounter;
-		
-		
 	}
-	
-	
 	
 	public void setCandyCounter(int candyCounter)
 	{
@@ -52,13 +48,15 @@ public class Student extends Character implements Runnable
 	}
 
 	public boolean touched()
-{
-    if (m_touched) {
-        return false; 
-    }
-    m_touched = true;
-	return true;
-}
+	{
+		if(m_touched)
+		{
+			return false; 
+		}
+
+		m_touched = true;
+		return true;
+	}
 
 	
 	public void incrementCandyCounter()
@@ -72,18 +70,22 @@ public class Student extends Character implements Runnable
 	}
 	
 	@Override
-public boolean goToChair()
-{
-	System.err.println(super.getIndex()+" "+m_candyCounter);
-    if (m_returningToChair) {
-        return false; 
-    }
-    m_returningToChair = true;
-    boolean result = !super.goToChair(); 
-    m_returningToChair = false; 
-    m_touched = false;
-    return result;
-}
+	public boolean goToChair()
+	{
+		System.err.println(super.getIndex()+" "+m_candyCounter);
+		if(m_returningToChair)
+		{
+			return false; 
+		}
+
+		m_returningToChair = true;
+
+		boolean result = !super.goToChair(); 
+		m_returningToChair = false; 
+		m_touched = false;
+
+		return result;
+	}
 
 	
 	public Candy findNearestCandy()
@@ -142,8 +144,6 @@ public boolean goToChair()
 	
 	public boolean tryToGoAtCandy()
 	{
-
-		
 		if(goToNearestCandy() && candyIsAtOneCaseOrLess())
 		{
 			++m_candyCounter;
@@ -162,35 +162,44 @@ public boolean goToChair()
 	
 	public void run()
 	{ 
-		while (true) {
-
-			if (!getMistresses()){
-			tryToGoAtCandy();
-			goToChair();}
-			if (getMistresses() && super.getIndex()==2){// démarre quand maîtresse, vas a la chaise 
+		while(true)
+		{
+			if(!getMistresses())
+			{
 				tryToGoAtCandy();
 				goToChair();
 			}
-	
-			try {
-				switch (super.getIndex()) {
+
+			if(getMistresses() && super.getIndex()==2)
+			{
+				// démarre quand maîtresse, vas a la chaise 
+				tryToGoAtCandy();
+				goToChair();
+			}
+
+			try
+			{
+				switch(super.getIndex())
+				{
 					case 1 :
 						Thread.sleep(3000);
-						break;
+					break;
+
 					case 2: 
 						Thread.sleep(500);
-						break;
+					break;
+
 					case 3: 
 						Thread.sleep(1000);
-						break;
+					break;
+
 					case 4: 
 						Thread.sleep(1000);
-						break;
+					break;
 				}
-					
-
-				
-			} catch (InterruptedException e) {
+			}
+			catch(InterruptedException err)
+			{
 				Thread.currentThread().interrupt();
 				break;
 			}

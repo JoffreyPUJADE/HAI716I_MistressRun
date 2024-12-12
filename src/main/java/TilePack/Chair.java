@@ -2,20 +2,20 @@ package TilePack;
 
 import CharacterPack.Character;
 
-public abstract class Chair extends Tile
+public abstract class Chair extends NeedBackground
 {
 	protected Orientation m_orientation;
 	
 	public Chair(String resourceName, String orientation, Character occupiedBy)
 	{
-		super(getFullResourceName(resourceName, strToEnum(orientation)), false, occupiedBy);
+		super(getFullResourceName(resourceName, strToEnum(orientation)), "tiles/floor.png", false, occupiedBy);
 		
 		m_orientation = strToEnum(orientation);
 	}
 	
 	public Chair(String resourceName, Orientation orientation, Character occupiedBy)
 	{
-		super(getFullResourceName(resourceName, orientation), false, occupiedBy);
+		super(getFullResourceName(resourceName, orientation), "tiles/floor.png", false, occupiedBy);
 		
 		m_orientation = orientation;
 	}

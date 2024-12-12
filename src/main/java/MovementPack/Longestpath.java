@@ -16,11 +16,10 @@ import CharacterPack.Character;
 import TilePack.Chair;
 import TilePack.Tile;
 
-public class Longestpath extends Character {
-    
-    public static List<Node> findPath(Pair<Tile, int[]> start, Pair<Tile, int[]> goal,
-                                      ArrayList<ArrayList<Tile>> tiles,
-                                      ArrayList<ArrayList<Character>> characters, int index) {
+public class Longestpath extends Character
+{
+    public static List<Node> findPath(Pair<Tile, int[]> start, Pair<Tile, int[]> goal, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters, int index)
+    {
         int[] startCoords = start.getValue();
         int[] goalCoords = goal.getValue();
 
@@ -31,33 +30,39 @@ public class Longestpath extends Character {
         Node startNode = new Node(startCoords[0], startCoords[1], null, 0, calculateHCost(startCoords, goalCoords));
         openList.add(startNode);
 
-        while (!openList.isEmpty()) {
+        while (!openList.isEmpty())
+        {
             Node currentNode = openList.stream()
-                                       .max(Comparator.comparingInt(Node::getFCost))
-                                       .orElseThrow(NoSuchElementException::new);
+                                        .max(Comparator.comparingInt(Node::getFCost))
+                                        .orElseThrow(NoSuchElementException::new);
 
             openList.remove(currentNode);
             closedList.add(currentNode);
 
-            if (currentNode.getX() == goalCoords[0] && currentNode.getY() == goalCoords[1]) {
+            if(currentNode.getX() == goalCoords[0] && currentNode.getY() == goalCoords[1])
+            {
                 return reconstructPath(cameFrom, currentNode);
             }
 
             List<Node> neighbors = getNeighbors(currentNode, tiles, characters, goalCoords, index);
 
-            for (Node neighbor : neighbors) {
-                if (closedList.contains(neighbor)) {
+            for(Node neighbor : neighbors)
+            {
+                if(closedList.contains(neighbor))
+                {
                     continue;
                 }
 
                 int tentativeGCost = currentNode.getGCost() + 1;
 
-                if (!openList.contains(neighbor) || tentativeGCost < neighbor.getGCost()) {
+                if(!openList.contains(neighbor) || tentativeGCost < neighbor.getGCost())
+                {
                     cameFrom.put(neighbor, currentNode);
                     neighbor.setGCost(tentativeGCost);
                     neighbor.setFCost(neighbor.getGCost() + neighbor.getHCost());
 
-                    if (!openList.contains(neighbor)) {
+                    if (!openList.contains(neighbor))
+                    {
                         openList.add(neighbor);
                     }
                 }
@@ -67,10 +72,12 @@ public class Longestpath extends Character {
         return Collections.emptyList();
     }
 
-    private static List<Node> reconstructPath(Map<Node, Node> cameFrom, Node currentNode) {
+    private static List<Node> reconstructPath(Map<Node, Node> cameFrom, Node currentNode)
+    {
         List<Node> path = new ArrayList<>();
 
-        while (currentNode != null) {
+        while(currentNode != null)
+        {
             path.add(currentNode);
             currentNode = cameFrom.get(currentNode);
         }
@@ -79,52 +86,59 @@ public class Longestpath extends Character {
 
         return path;
     }
-        private static List<Node> getNeighbors(Node node, ArrayList<ArrayList<Tile>> tiles,
-            ArrayList<ArrayList<Character>> characters, int[] targetPosition, int index) {
+
+    private static List<Node> getNeighbors(Node node, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters, int[] targetPosition, int index)
+    {
         List<Node> neighbors = new ArrayList<>();
         int[] dx = {-1, 1, 0, 0, -1, 1, -1, 1};  
         int[] dy = {0, 0, -1, 1, -1, -1, 1, 1};
 
-        
-        for (int i = 0; i < 8; i++) {
-        int newX = node.getX() + dx[i];
-        int newY = node.getY() + dy[i];
+        for(int i = 0; i < 8; i++)
+        {
+            int newX = node.getX() + dx[i];
+            int newY = node.getY() + dy[i];
 
-       
-        if (isInBounds(newX, newY, tiles)) { 
-            if (!tiles.get(newX).get(newY).isObstacle() && characters.get(newX).get(newY) == null) { 
-            int hCost = calculateHCost(new int[]{newX, newY}, targetPosition);
-            neighbors.add(new Node(newX, newY, node, node.getGCost() + 1, hCost));
+            if(isInBounds(newX, newY, tiles))
+            {
+                if(!tiles.get(newX).get(newY).isObstacle() && characters.get(newX).get(newY) == null)
+                {
+                    int hCost = calculateHCost(new int[]{newX, newY}, targetPosition);
+                    neighbors.add(new Node(newX, newY, node, node.getGCost() + 1, hCost));
+                }
             }
-        }
         }
 
         return neighbors;
-        }
-    //heuristique chebyshev
-    private static int calculateHCost(int[] currentPosition, int[] targetPosition) {
+    }
+
+    // heuristique chebyshev
+    private static int calculateHCost(int[] currentPosition, int[] targetPosition)
+    {
         int dx = Math.abs(currentPosition[0] - targetPosition[0]);
         int dy = Math.abs(currentPosition[1] - targetPosition[1]);
+
         return Math.max(dx, dy);
     }
 
-    public Longestpath(String spriteSheet, Chair chair, int i, int j, int index) {
+    public Longestpath(String spriteSheet, Chair chair, int i, int j, int index)
+    {
         super(spriteSheet, chair, i, j);
     }
 
     @Override
-    public boolean isTouched() {
-       
+    public boolean isTouched()
+    {
         throw new UnsupportedOperationException("Unimplemented method 'isTouched'");
     }
 
     @Override
-    public boolean isEscaping() {
+    public boolean isEscaping()
+    {
         throw new UnsupportedOperationException("Unimplemented method 'isEscaping'");
     }
 
-
-        public static boolean isInBounds(int x, int y, ArrayList<ArrayList<Tile>> map) {
-            return x >= 0 && x < map.size() && y >= 0 && y < map.get(x).size();
-        }
+    public static boolean isInBounds(int x, int y, ArrayList<ArrayList<Tile>> map)
+    {
+        return x >= 0 && x < map.size() && y >= 0 && y < map.get(x).size();
+    }
 }

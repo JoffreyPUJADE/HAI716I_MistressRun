@@ -64,7 +64,6 @@ public class Mistress extends Character implements Runnable
 
 		return studentsAround;
 	}
-
 	
 	public ArrayList<Student> getEscapingStudents(ArrayList<ArrayList<Student>> arrayStudents)
 	{
@@ -107,19 +106,31 @@ public class Mistress extends Character implements Runnable
 		return false;
 	}
 
-	public void followStudent() {
+	@Override
+	public boolean goToChair()
+	{
+		boolean result = !super.goToChair(); 
+		m_returningToChair = false; 
+		return result;
+	}
+
+	public void followStudent()
+	{
 		Game game = Game.getInstance();
 		Classroom classroom = game.getClassroom();
 		ArrayList<ArrayList<Tile>> arrayTiles = classroom.getTiles();
 		ArrayList<ArrayList<Student>> students = classroom.getStudents();
 		ArrayList<Student> escapingStudents = getEscapingStudents(students);
-		if (escapingStudents.isEmpty()) {
+
+		if(escapingStudents.isEmpty())
+		{
 			goToChair();
 		}
 	
-		for (Student escapingStudent : escapingStudents) {
-
-			if (escapingStudent == null) {
+		for(Student escapingStudent : escapingStudents)
+		{
+			if(escapingStudent == null)
+			{
 				continue; 
 			}
 	
@@ -129,8 +140,10 @@ public class Mistress extends Character implements Runnable
                         
 			boolean touchedNearby = false;
 	
-			for (Student nearbyStudent : nearbyStudents) {
-				if (nearbyStudent.isEscaping() && !nearbyStudent.isTouched()) {
+			for(Student nearbyStudent : nearbyStudents)
+			{
+				if(nearbyStudent.isEscaping() && !nearbyStudent.isTouched())
+				{
 					nearbyStudent.touched();
 					touchedNearby = true;
 					break; 
@@ -146,25 +159,19 @@ public class Mistress extends Character implements Runnable
 	{
 		return String.format("%s ; TouchedStudents : %d", super.toString(), m_touchedStudents);
 	}
-	public boolean goToChair()
-		{
-			
-			boolean result = !super.goToChair(); 
-			m_returningToChair = false; 
-			return result;
-		}
 
-		public void run()
-		{
-			while (true) { 
-				followStudent();
-			}
-				
+	public void run()
+	{
+		while(true)
+		{ 
+			followStudent();
 		}
+			
+	}
 
 	@Override
-		public boolean isObstacle(ArrayList<ArrayList<Tile>> map, ArrayList<ArrayList<Character>> charInClass, int x, int y)
-		{
-			return map.get(x).get(y).isObstacle();
-		}
+	public boolean isObstacle(ArrayList<ArrayList<Tile>> map, ArrayList<ArrayList<Character>> charInClass, int x, int y)
+	{
+		return map.get(x).get(y).isObstacle();
+	}
 }

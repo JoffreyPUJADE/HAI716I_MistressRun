@@ -7,6 +7,7 @@ import AlgoPack.Common;
 import AlgoPack.Pair;
 import TilePack.Tile;
 import TilePack.Floor;
+import TilePack.NeedBackground;
 import TilePack.Board;
 import TilePack.Desk;
 import TilePack.Candy;
@@ -423,8 +424,14 @@ public class Classroom extends JPanel
 					
 					try
 					{
-						BufferedImage image = ImageIO.read(is);
+						if(m_classroom.get(i).get(j) instanceof NeedBackground)
+						{
+							BufferedImage background = ImageIO.read(Common.getStreamFromResource(((NeedBackground)m_classroom.get(i).get(j)).getBackground()));
+
+							g.drawImage(background, j * m_tileSize, i * m_tileSize, m_tileSize, m_tileSize, this);
+						}
 						
+						BufferedImage image = ImageIO.read(is);
 						g.drawImage(image, j * m_tileSize, i * m_tileSize, m_tileSize, m_tileSize, this);
 					}
 					catch(IOException err)
