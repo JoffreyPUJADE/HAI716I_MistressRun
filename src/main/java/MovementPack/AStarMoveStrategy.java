@@ -90,10 +90,10 @@ public class AStarMoveStrategy extends Character
     private static List<Node> getNeighbors(Node node, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters, int[] targetPosition, int index)
     {
         List<Node> neighbors = new ArrayList<>();
-        int[] dx = {-1, 1, 0, 0, -1, 1, -1, 1};  
-        int[] dy = {0, 0, -1, 1, -1, -1, 1, 1};
+        int[] dx = {-1, 1, 0, 0};  
+        int[] dy = {0, 0, -1, 1 };
 
-        for(int i = 0; i < 8; i++)
+        for(int i = 0; i < 4; i++)
         {
             int newX = node.getX() + dx[i];
             int newY = node.getY() + dy[i];
