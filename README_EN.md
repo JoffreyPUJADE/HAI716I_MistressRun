@@ -4,7 +4,7 @@
 
 A multi-agent programming project.
 
-# Sommaire
+# Summary
 
 * [Compilation](#compilation)
 * [Execution](#execution)
