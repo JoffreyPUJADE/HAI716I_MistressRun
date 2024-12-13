@@ -2,18 +2,17 @@ package MainPack;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-import GraphicsPack.Classroom;
-import GraphicsPack.Window;
-import GraphicsPack.CharacterInfo;
-import GraphicsPack.MistressInfo;
-import GraphicsPack.StudentInfo;
 import CharacterPack.Character;
 import CharacterPack.Mistress;
 import CharacterPack.Student;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import GraphicsPack.CharacterInfo;
+import GraphicsPack.Classroom;
+import GraphicsPack.MistressInfo;
+import GraphicsPack.StudentInfo;
+import GraphicsPack.Window;
 
 public class Game
 {

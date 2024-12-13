@@ -16,14 +16,15 @@ import CharacterPack.Character;
 import TilePack.Chair;
 import TilePack.Tile;
 
-public class AvoidMoveStrategy extends Character
+public class AvoidMoveStrategy extends Strategy
 {
     public static String getStrategyName()
     {
         return AvoidMoveStrategy.class.getSimpleName();
     }
     
-    public static List<Node> findPath(Pair<Tile, int[]> start, Pair<Tile, int[]> goal, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters, int index)
+    @Override
+    public List<Node> findPath(Pair<Tile, int[]> start, Pair<Tile, int[]> goal, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters)
     {
         int[] startCoords = start.getValue();
         int[] goalCoords = goal.getValue();
@@ -49,7 +50,7 @@ public class AvoidMoveStrategy extends Character
                 return reconstructPath(cameFrom, currentNode);
             }
 
-            List<Node> neighbors = getNeighbors(currentNode, tiles, characters, goalCoords, index);
+            List<Node> neighbors = getNeighbors(currentNode, tiles, characters, goalCoords);
 
             for(Node neighbor : neighbors)
             {
@@ -93,7 +94,7 @@ public class AvoidMoveStrategy extends Character
     }
 
     //Etre le plus loin en le voyant comme obstacle 
-    private static List<Node> getNeighbors(Node node, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters, int[] targetPosition, int index)
+    private static List<Node> getNeighbors(Node node, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters, int[] targetPosition)
     {
         List<Node> neighbors = new ArrayList<>();
         int[] dx = {-1, 1, 0, 0, -1, 1, -1, 1};  
@@ -126,7 +127,7 @@ public class AvoidMoveStrategy extends Character
         return Math.max(dx, dy);
     }
 
-    public AvoidMoveStrategy(String spriteSheet, Chair chair, int i, int j, int index)
+    public AvoidMoveStrategy(String spriteSheet, Chair chair, int i, int j)
     {
         super(spriteSheet, chair, i, j);
     }

@@ -16,14 +16,21 @@ import CharacterPack.Character;
 import TilePack.Chair;
 import TilePack.Tile;
 
-public class Longestpath extends Character
+public class Longestpath extends Strategy
+
 {
+
+    public Longestpath(String spriteSheet, Chair chair, int i, int j)
+    {
+        super(spriteSheet, chair, i, j);
+    }
     public static String getStrategyName()
     {
         return Longestpath.class.getSimpleName();
     }
     
-    public static List<Node> findPath(Pair<Tile, int[]> start, Pair<Tile, int[]> goal, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters, int index)
+    @Override
+    public  List<Node> findPath(Pair<Tile, int[]> start, Pair<Tile, int[]> goal, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters)
     {
         int[] startCoords = start.getValue();
         int[] goalCoords = goal.getValue();
@@ -49,7 +56,7 @@ public class Longestpath extends Character
                 return reconstructPath(cameFrom, currentNode);
             }
 
-            List<Node> neighbors = getNeighbors(currentNode, tiles, characters, goalCoords, index);
+            List<Node> neighbors = getNeighbors(currentNode, tiles, characters, goalCoords);
 
             for(Node neighbor : neighbors)
             {
@@ -92,13 +99,12 @@ public class Longestpath extends Character
         return path;
     }
 
-    private static List<Node> getNeighbors(Node node, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters, int[] targetPosition, int index)
-    {
-        List<Node> neighbors = new ArrayList<>();
-        int[] dx = {-1, 1, 0, 0, -1, 1, -1, 1};  
-        int[] dy = {0, 0, -1, 1, -1, -1, 1, 1};
-
-        for(int i = 0; i < 8; i++)
+    private static List<Node> getNeighbors(Node node, ArrayList<ArrayList<Tile>> tiles,
+    ArrayList<ArrayList<Character>> characters, int[] targetPosition) {
+    List<Node> neighbors = new ArrayList<>();
+    int[] dx = {-1, 1, 0, 0};
+    int[] dy = {0, 0, -1, 1};
+        for(int i = 0; i < 4; i++)
         {
             int newX = node.getX() + dx[i];
             int newY = node.getY() + dy[i];
@@ -125,10 +131,6 @@ public class Longestpath extends Character
         return Math.max(dx, dy);
     }
 
-    public Longestpath(String spriteSheet, Chair chair, int i, int j, int index)
-    {
-        super(spriteSheet, chair, i, j);
-    }
 
     @Override
     public boolean isTouched()
@@ -146,4 +148,9 @@ public class Longestpath extends Character
     {
         return x >= 0 && x < map.size() && y >= 0 && y < map.get(x).size();
     }
-}
+} 
+
+
+
+
+

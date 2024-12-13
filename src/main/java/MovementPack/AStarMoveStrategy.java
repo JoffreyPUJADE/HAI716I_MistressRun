@@ -16,14 +16,21 @@ import CharacterPack.Character;
 import TilePack.Chair;
 import TilePack.Tile;
 
-public class AStarMoveStrategy extends Character
+public class AStarMoveStrategy extends Strategy
+
 {
+
+    public AStarMoveStrategy(String spriteSheet, Chair chair, int i, int j)
+    {
+        super(spriteSheet, chair, i, j);
+    }
     public static String getStrategyName()
     {
         return AStarMoveStrategy.class.getSimpleName();
     }
     
-    public static List<Node> findPath(Pair<Tile, int[]> start, Pair<Tile, int[]> goal, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters, int index)
+    @Override
+    public  List<Node> findPath(Pair<Tile, int[]> start, Pair<Tile, int[]> goal, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters)
     {
         int[] startCoords = start.getValue();
         int[] goalCoords = goal.getValue();
@@ -35,7 +42,7 @@ public class AStarMoveStrategy extends Character
         Node startNode = new Node(startCoords[0], startCoords[1], null, 0, calculateHCost(startCoords, goalCoords));
         openList.add(startNode);
 
-        while(!openList.isEmpty())
+        while (!openList.isEmpty())
         {
             Node currentNode = openList.stream()
                                         .min(Comparator.comparingInt(Node::getFCost))
@@ -49,7 +56,7 @@ public class AStarMoveStrategy extends Character
                 return reconstructPath(cameFrom, currentNode);
             }
 
-            List<Node> neighbors = getNeighbors(currentNode, tiles, characters, goalCoords, index);
+            List<Node> neighbors = getNeighbors(currentNode, tiles, characters, goalCoords);
 
             for(Node neighbor : neighbors)
             {
@@ -66,7 +73,7 @@ public class AStarMoveStrategy extends Character
                     neighbor.setGCost(tentativeGCost);
                     neighbor.setFCost(neighbor.getGCost() + neighbor.getHCost());
 
-                    if(!openList.contains(neighbor))
+                    if (!openList.contains(neighbor))
                     {
                         openList.add(neighbor);
                     }
@@ -92,21 +99,20 @@ public class AStarMoveStrategy extends Character
         return path;
     }
 
-    private static List<Node> getNeighbors(Node node, ArrayList<ArrayList<Tile>> tiles, ArrayList<ArrayList<Character>> characters, int[] targetPosition, int index)
-    {
-        List<Node> neighbors = new ArrayList<>();
-        int[] dx = {-1, 1, 0, 0};  
-        int[] dy = {0, 0, -1, 1 };
-
-        for(int i = 0; i < 4; i++)
+    private static List<Node> getNeighbors(Node node, ArrayList<ArrayList<Tile>> tiles,
+    ArrayList<ArrayList<Character>> characters, int[] targetPosition) {
+    List<Node> neighbors = new ArrayList<>();
+    int[] dx = {-1, 1, 0, 0};
+    int[] dy = {0, 0, -1, 1};
+        for(int i = 0; i <4 ; i++)
         {
             int newX = node.getX() + dx[i];
             int newY = node.getY() + dy[i];
 
             if(isInBounds(newX, newY, tiles))
-            { 
+            {
                 if(!tiles.get(newX).get(newY).isObstacle() && characters.get(newX).get(newY) == null)
-                { 
+                {
                     int hCost = calculateHCost(new int[]{newX, newY}, targetPosition);
                     neighbors.add(new Node(newX, newY, node, node.getGCost() + 1, hCost));
                 }
@@ -125,10 +131,6 @@ public class AStarMoveStrategy extends Character
         return Math.max(dx, dy);
     }
 
-    public AStarMoveStrategy(String spriteSheet, Chair chair, int i, int j, int index)
-    {
-        super(spriteSheet, chair, i, j);
-    }
 
     @Override
     public boolean isTouched()
@@ -142,9 +144,13 @@ public class AStarMoveStrategy extends Character
         throw new UnsupportedOperationException("Unimplemented method 'isEscaping'");
     }
 
-
     public static boolean isInBounds(int x, int y, ArrayList<ArrayList<Tile>> map)
     {
         return x >= 0 && x < map.size() && y >= 0 && y < map.get(x).size();
     }
-}
+} 
+
+
+
+
+
